@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import './Login.css'; // Importing CSS file for styling
 import axios from 'axios';
+import { useHistory } from 'react-router-dom'; // Import useHistory hook from React Router
+import MainScreen from './MainScreen'; // Import MainScreen component
 
-function Login() {
-  //const [showLoginScreen, setShowLoginScreen] = useState(false); // State to track if login screen should be displayed
+function Login({ onLogin }) {
+
   const [showLoginScreen, setShowLoginScreen] = useState(false); // State to track if login screen should be displayed
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -36,6 +38,7 @@ function Login() {
         // User validated, update state to show authenticated message
         setIsAuthenticated(true);
         setErrorMessage('');
+        onLogin(); // Call the onLogin function passed from the parent component
       } else {
         // Invalid credentials, update state to show error message
         setIsAuthenticated(false);
@@ -65,9 +68,9 @@ function Login() {
           <button type="button" onClick={handleSignIn}>Sign In</button> {/* Sign In button */}
         </div>
         {/* Conditionally render the login screen or next screen based on authentication */}
-        {showLoginScreen && !isAuthenticated && <LoginScreen handleSubmit={handleSubmit} />}
-        {isAuthenticated && <p>User details validated</p>}
-        {!isAuthenticated && errorMessage && <p>{errorMessage}</p>}
+          {showLoginScreen && !isAuthenticated && <LoginScreen handleSubmit={handleSubmit} />}
+          {isAuthenticated && <MainScreen />} {/* Render MainScreen if isAuthenticated is true */}
+          {!isAuthenticated && errorMessage && <p>{errorMessage}</p>}
       </div>
     </div>
   );
