@@ -12,6 +12,7 @@ function Login({ onLogin }) {
   const handleJoin = () => {
     console.log('Join button clicked');
     // Implement the logic for joining here
+    navigate('/join');
   };
 
   const handleSignIn = () => {

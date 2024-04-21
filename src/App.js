@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Login from './Login';
 import MainScreen from './MainScreen';
+import JoinScreen from './JoinScreen';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import heartLogo from './heart.png';
 
@@ -15,6 +16,7 @@ function App() {
                         <Route path="/" element={<Navigate replace to="/login" />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/main" element={<MainScreen />} />
+                        <Route path="/join" element={<JoinScreen />} />
                     </Routes>
                 </header>
             </div>
