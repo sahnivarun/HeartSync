@@ -128,15 +128,15 @@ function JoinScreen() {
                         <label htmlFor="sex" style={{ marginRight: "10px" }}>Sex<span>*</span>:</label>
                         <ul className="options" style={{ display: "flex", listStyle: "none", padding: 0 }}>
                             <li style={{ marginRight: "10px" }}>
-                                <input type="radio" id="male" name="sex" value="male" required />
+                                <input type="radio" id="male" name="sex" value="male" onChange={(e) => setSex(e.target.value)} required />
                                 <label htmlFor="male" style={{ fontSize: "0.9em" }}>Male</label>
                             </li>
                             <li style={{ marginRight: "10px" }}>
-                                <input type="radio" id="female" name="sex" value="female" required />
+                                <input type="radio" id="female" name="sex" value="female" onChange={(e) => setSex(e.target.value)} required />
                                 <label htmlFor="female" style={{ fontSize: "0.9em" }}>Female</label>
                             </li>
                             <li>
-                                <input type="radio" id="nonbinary" name="sex" value="nonbinary" required />
+                                <input type="radio" id="nonbinary" name="sex" value="nonbinary" onChange={(e) => setSex(e.target.value)} required />
                                 <label htmlFor="nonbinary" style={{ fontSize: "0.9em" }}>Nonbinary</label>
                             </li>
                         </ul>
@@ -174,23 +174,23 @@ function JoinScreen() {
                     <label htmlFor="orientation" style={{ marginRight: "10px" }}>Orientation<span>*</span>:</label>
                     <ul className="options" style={{ display: "flex", listStyle: "none", padding: 0 }}>
                         <li style={{ marginRight: "10px" }}>
-                            <input type="radio" id="straight" name="orientation" value="Straight" required />
+                            <input type="radio" id="straight" name="orientation" value="Straight" onChange={(e) => setOrientation(e.target.value)} required />
                             <label htmlFor="straight" style={{ fontSize: "0.9em" }}>Straight</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
-                            <input type="radio" id="gay" name="orientation" value="Gay" required />
+                            <input type="radio" id="gay" name="orientation" value="Gay" onChange={(e) => setOrientation(e.target.value)} required />
                             <label htmlFor="gay" style={{ fontSize: "0.9em" }}>Gay</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
-                            <input type="radio" id="bisexual" name="orientation" value="Bisexual" required />
+                            <input type="radio" id="bisexual" name="orientation" value="Bisexual" onChange={(e) => setOrientation(e.target.value)} required />
                             <label htmlFor="bisexual" style={{ fontSize: "0.9em" }}>Bisexual</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
-                            <input type="radio" id="lesbian" name="orientation" value="Lesbian" required />
+                            <input type="radio" id="lesbian" name="orientation" value="Lesbian" onChange={(e) => setOrientation(e.target.value)} required />
                             <label htmlFor="lesbian" style={{ fontSize: "0.9em" }}>Lesbian</label>
                         </li>
                         <li>
-                            <input type="radio" id="asexual" name="orientation" value="Asexual" required />
+                            <input type="radio" id="asexual" name="orientation" value="Asexual" onChange={(e) => setOrientation(e.target.value)} required />
                             <label htmlFor="asexual" style={{ fontSize: "0.9em" }}>Asexual</label>
                         </li>
                     </ul>
