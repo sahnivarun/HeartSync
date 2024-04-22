@@ -32,7 +32,9 @@ function Login({ onLogin }) {
         setIsAuthenticated(true);
         setErrorMessage('');
         //onLogin(); // Optional: trigger additional actions on login
-        navigate('/main'); // Navigate to MainScreen
+        //navigate('/main'); // Navigate to MainScreen
+        navigate('/main', { state: { username } });
+
       } else {
         setIsAuthenticated(false);
         setErrorMessage('Invalid credentials!');

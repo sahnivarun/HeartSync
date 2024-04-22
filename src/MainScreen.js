@@ -1,12 +1,16 @@
 // MainScreen.js
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 function MainScreen() {
-  return (
-    <div>
-      <h1>Logged in successfully. Varun Sexy.</h1>
-    </div>
-  );
+    const location = useLocation();
+    const username = location.state.username;
+
+    return (
+        <div>
+            <h1>Welcome, {username}!</h1>
+        </div>
+    );
 }
 
 export default MainScreen;
