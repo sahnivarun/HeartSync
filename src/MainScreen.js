@@ -11,6 +11,8 @@ function MainScreen() {
         navigate('/preferences', { state: { username } });
     };
 
+    //username is here, we need to card using this username and filter columns
+
     return (
         <div>
             <h1>Welcome, {username}!</h1>

@@ -5,6 +5,7 @@ from flask_cors import CORS
 import sqlite3
 import base64
 import os
+import json
 
 
 app = Flask(__name__)
@@ -103,6 +104,76 @@ def join():
     else:
         add_user(username, password, name, image_path, sex, age, location, status, orientation, body_type, diet, drinks, drugs, education, ethnicity, height, income, job, offspring, pets, religion, sign, smokes, speaks, essay0, essay1, essay2, essay3, essay4, essay5, essay6, essay7, essay8, essay9, last_online)
         return jsonify({'success': True, 'message': 'User added successfully'})
+
+# Route for handling preference update requests
+@app.route('/preference', methods=['POST'])
+def update_preference():
+    data = request.get_json()
+    username = data['username']
+    target_age_min = data['target_age_min']
+    target_age_max = data['target_age_max']
+    target_sex = data['target_sex']
+    target_status = data['target_status']
+    target_orientation = data['target_orientation']
+    target_drinks = data['target_drinks']
+    target_drugs = data['target_drugs']
+    target_ethnicity = data['target_ethnicity']
+    target_height = data['target_height']
+    target_income = data['target_income']
+    target_offspring = data['target_offspring']
+    target_pets = data['target_pets']
+    target_religion = data['target_religion']
+    target_smokes = data['target_smokes']
+
+    # Serialize lists to strings
+    target_drinks_str = json.dumps(target_drinks)
+    target_drugs_str = json.dumps(target_drugs)
+    target_ethnicity_str = json.dumps(target_ethnicity)
+    target_offspring_str = json.dumps(target_offspring)
+    target_pets_str = json.dumps(target_pets)
+    target_religion_str = json.dumps(target_religion)
+    target_orientation_str = json.dumps(target_orientation)
+    target_sex_str = json.dumps(target_sex)
+    target_status_str = json.dumps(target_status)
+    target_smokes_str = json.dumps(target_smokes)
+
+    # Connect to the database
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+
+     # Update the user preferences in the database
+    cursor.execute("""
+        UPDATE users
+        SET target_age_min = ?, target_age_max = ?, target_sex = ?, target_status = ?, target_orientation = ?,
+            target_drinks = ?, target_drugs = ?, target_ethnicity = ?, target_height = ?, target_income = ?,
+            target_offspring = ?, target_pets = ?, target_religion = ?, target_smokes = ?
+        WHERE username = ?
+    """, (target_age_min, target_age_max, target_sex, target_status_str, target_orientation_str, target_drinks_str,
+          target_drugs_str, target_ethnicity_str, target_height, target_income, target_offspring_str, target_pets_str,
+          target_religion_str, target_smokes_str, username))
+
+    # Commit changes and close the database connection
+    conn.commit()
+    conn.close()
+
+    return jsonify({'success': True, 'message': 'User preferences updated successfully'})
+    # Update the user preferences in the database
+#     cursor.execute("""
+#         UPDATE users
+#         SET target_age_min = ?, target_age_max = ?, target_sex = ?, target_status = ?, target_orientation = ?,
+#             target_drinks = ?, target_drugs = ?, target_ethnicity = ?, target_height = ?, target_income = ?,
+#             target_offspring = ?, target_pets = ?, target_religion = ?, target_smokes = ?
+#         WHERE username = ?
+#     """, (target_age_min, target_age_max, target_sex, target_status, target_orientation, target_drinks,
+#           target_drugs, target_ethnicity, target_height, target_income, target_offspring, target_pets,
+#           target_religion, target_smokes, username))
+#
+#     # Commit changes and close the database connection
+#     conn.commit()
+#     conn.close()
+#
+#     return jsonify({'success': True, 'message': 'User preferences updated successfully'})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
