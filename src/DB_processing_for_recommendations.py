@@ -3,10 +3,23 @@ import pandas as pd
 from rank_bm25 import BM25Okapi
 import nltk
 import string
+import numpy as np
 
 # Download necessary NLTK resources
 nltk.download('punkt')
 nltk.download('stopwords')
+
+# Define weights for each feature
+feature_weights = {
+    'ethnicity': 0,
+    'job': 0,
+    'body_type': 1,
+    'location': 0,
+    'religion': 0,
+    'sign': 0,
+    'speaks': 0,
+    'essays_concatenated': 0
+}
 
 # Function to preprocess text
 def preprocess(text):
@@ -35,9 +48,61 @@ def scale_and_display_scores(doc_index, min_val=0, max_val=5):
         print(f"Scaled scores for {column}:")
         print(scaled_scores)
 
+# Calculate the weighted combined BM25 scores
+def calculate_combined_scores(bm25_objects, corpora, num_users, feature_weights):
+    # Initialize the combined feature matrix with zeros
+    combined_features = np.zeros((num_users, num_users))
+
+    # Total weight normalization factor
+    total_weight = sum(feature_weights.values())
+
+    # Iterate over each feature to calculate scores
+    for feature, bm25_obj in bm25_objects.items():
+        scores_matrix = np.array([bm25_obj.get_scores(doc) for doc in corpora[feature]])
+        
+        # Scale each score matrix
+        min_val, max_val = 0, 5  # Define the range for scaling
+        scores_min = scores_matrix.min(axis=1, keepdims=True)
+        scores_max = scores_matrix.max(axis=1, keepdims=True)
+        scores_matrix = min_val + (scores_matrix - scores_min) / (scores_max - scores_min) * (max_val - min_val)
+        
+        # Avoid NaNs by replacing them with the minimum value
+        scores_matrix = np.nan_to_num(scores_matrix, nan=min_val)
+        
+        # Apply the feature weight and sum the weighted scores matrix to the combined features matrix
+        combined_features += scores_matrix * feature_weights[feature]
+
+    # Normalize the combined features matrix by the total weight
+    combined_features /= total_weight
+
+    return combined_features
+
+
+
+# Function to calculate, scale scores and return scores with indices for combined features matrix
+def scale_and_sort_combined_features(combined_features, min_val=0, max_val=5):
+    num_users = combined_features.shape[0]
+    scaled_combined_features = np.zeros_like(combined_features)
+
+    # Scale each user's scores using min-max scaling
+    for i in range(num_users):
+        scores = combined_features[i, :]
+        scaled_scores = min_max_scale(scores, min_val, max_val)
+        scaled_combined_features[i, :] = scaled_scores
+
+    # Create a list of tuples (score, index) for sorting
+    combined_scores_with_indices = []
+    for i in range(num_users):
+        score_with_indices = [(score, idx) for idx, score in enumerate(scaled_combined_features[i, :])]
+        sorted_scores_with_indices = sorted(score_with_indices, key=lambda x: x[0], reverse=True)
+        combined_scores_with_indices.append(sorted_scores_with_indices)
+
+    return combined_scores_with_indices
+     
+
 # Connect to SQLite database
 conn = sqlite3.connect('users.db')
-query = "SELECT ethnicity, job, location, religion, sign, speaks, essay0, essay1, essay2, essay3, essay4, essay5, essay6, essay7, essay8, essay9 FROM users LIMIT 100"
+query = "SELECT body_type, ethnicity, job, location, religion, sign, speaks, essay0, essay1, essay2, essay3, essay4, essay5, essay6, essay7, essay8, essay9 FROM users LIMIT 100"
 df = pd.read_sql_query(query, conn)
 conn.close()
 
@@ -50,7 +115,7 @@ bm25_objects = {}
 corpora = {}
 
 # Columns to calculate BM25 on
-columns = ['ethnicity', 'job', 'location', 'religion', 'sign', 'speaks', 'essays_concatenated']
+columns = ['body_type','ethnicity', 'job', 'location', 'religion', 'sign', 'speaks', 'essays_concatenated']
 
 # Calculate BM25 for each column
 for column in columns:
@@ -61,8 +126,43 @@ for column in columns:
     bm25 = BM25Okapi(corpus)
     bm25_objects[column] = bm25
 
+# Number of users (assumed to be the number of rows in df)
+num_users = len(df)   
+
+combined_features = calculate_combined_scores(bm25_objects, corpora, num_users, feature_weights)
+   
+
+
+# Function to calculate, scale BM25 scores, and return scores with indices
+def calculate_scaled_bm25_scores_with_indices(bm25_obj, corpus, min_val=0, max_val=5):
+    # Calculate BM25 scores for the corpus
+    bm25_scores_matrix = [bm25_obj.get_scores(doc) for doc in corpus]
+    
+    # Scale scores for the entire matrix
+    scaled_bm25_scores_matrix = [min_max_scale(scores, min_val, max_val) for scores in bm25_scores_matrix]
+    
+    # Pair scores with user indices
+    bm25_scores_with_indices = [[(score, idx) for idx, score in enumerate(user_scores)] for user_scores in scaled_bm25_scores_matrix]
+    
+    return bm25_scores_with_indices
+
+# Calculate and store scaled BM25 scores with indices
+scaled_bm25_with_indices = {}
+for column in columns:
+    scaled_bm25_with_indices[column] = calculate_scaled_bm25_scores_with_indices(bm25_objects[column], corpora[column])
+
+# Sort the scores with indices
+sorted_bm25_scores_with_indices = {}
+for column in columns:
+    # Sort each user's scores in descending order while keeping indices
+    sorted_bm25_scores_with_indices[column] = [sorted(user_scores, key=lambda x: x[0], reverse=True) for user_scores in scaled_bm25_with_indices[column]]
+    
+
+# Calculate and sort scaled scores with indices for the combined features matrix
+sorted_combined_features_with_indices = scale_and_sort_combined_features(combined_features)
+
+# Example to display sorted scores for user_0
+print(sorted_combined_features_with_indices[0])
 
 
 
-# Example usage
-scale_and_display_scores(0)  # Display BM25 scores for the first user across all columns
