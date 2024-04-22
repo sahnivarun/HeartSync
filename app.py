@@ -157,22 +157,77 @@ def update_preference():
     conn.close()
 
     return jsonify({'success': True, 'message': 'User preferences updated successfully'})
-    # Update the user preferences in the database
-#     cursor.execute("""
-#         UPDATE users
-#         SET target_age_min = ?, target_age_max = ?, target_sex = ?, target_status = ?, target_orientation = ?,
-#             target_drinks = ?, target_drugs = ?, target_ethnicity = ?, target_height = ?, target_income = ?,
-#             target_offspring = ?, target_pets = ?, target_religion = ?, target_smokes = ?
-#         WHERE username = ?
-#     """, (target_age_min, target_age_max, target_sex, target_status, target_orientation, target_drinks,
-#           target_drugs, target_ethnicity, target_height, target_income, target_offspring, target_pets,
-#           target_religion, target_smokes, username))
-#
-#     # Commit changes and close the database connection
-#     conn.commit()
-#     conn.close()
-#
-#     return jsonify({'success': True, 'message': 'User preferences updated successfully'})
+
+# Route for handling getting user details
+@app.route('/user/<username>', methods=['GET'])
+def get_user_details(username):
+    # Connect to the database
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+
+    # Query the database for the user details
+    cursor.execute("SELECT * FROM users WHERE username=?", (username,))
+    user_details = cursor.fetchone()
+
+    # Close the database connection
+    conn.close()
+
+    if user_details:
+        # Extract user details
+        user = {
+            'username': user_details[31],
+            'password': user_details[32],
+            'name': user_details[33],
+            'image_path': user_details[34],
+            'age': user_details[0],
+            'status': user_details[1],
+            'sex': user_details[2],
+            'orientation': user_details[3],
+            'body_type': user_details[4],
+            'diet': user_details[5],
+            'drinks': user_details[6],
+            'drugs': user_details[7],
+            'education': user_details[8],
+            'ethnicity': user_details[9],
+            'height': user_details[10],
+            'income': user_details[11],
+            'job': user_details[12],
+            'last_online': user_details[13],
+            'location': user_details[14],
+            'offspring': user_details[15],
+            'pets': user_details[16],
+            'religion': user_details[17],
+            'sign': user_details[18],
+            'smokes': user_details[19],
+            'speaks': user_details[20],
+            'essay0': user_details[21],
+            'essay1': user_details[22],
+            'essay2': user_details[23],
+            'essay3': user_details[24],
+            'essay4': user_details[25],
+            'essay5': user_details[26],
+            'essay6': user_details[27],
+            'essay7': user_details[28],
+            'essay8': user_details[29],
+            'essay9': user_details[30],
+            'target_age_min': user_details[35],
+            'target_age_max': user_details[36],
+            'target_sex': user_details[37],
+            'target_status': user_details[38],
+            'target_orientation': user_details[39],
+            'target_drinks': user_details[40],
+            'target_drugs': user_details[41],
+            'target_ethnicity': user_details[42],
+            'target_height': user_details[43],
+            'target_income': user_details[44],
+            'target_offspring': user_details[45],
+            'target_pets': user_details[46],
+            'target_religion': user_details[47],
+            'target_smokes': user_details[48]
+        }
+        return jsonify({'success': True, 'user': user})
+    else:
+        return jsonify({'success': False, 'message': 'User not found'})
 
 
 if __name__ == '__main__':
