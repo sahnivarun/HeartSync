@@ -169,6 +169,8 @@ function JoinScreen() {
                     />
                 </div>
 
+                <div style={{ marginBottom: '20px' }}></div>
+
                 <div>
                     <label htmlFor="image">Image:</label>
                     <input type="file" id="image" accept="image/*" onChange={handleImageUpload} />
