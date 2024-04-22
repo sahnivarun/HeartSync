@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 function JoinScreen() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [image, setImage] = useState(null);
     const [age, setAge] = useState('');
     const [sex, setSex] = useState('');
     const [name, setName] = useState('');
@@ -40,6 +41,20 @@ function JoinScreen() {
 
     const navigate = useNavigate(); // Import useNavigate hook
 
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        setImage(file);
+    };
+
+    const convertImageToBase64 = (image) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(',')[1]); // Get base64 string after comma
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(image);
+        });
+    };
+
     const handleJoin = async (e) => {
         e.preventDefault();
 
@@ -54,10 +69,13 @@ function JoinScreen() {
             // Format the date-time as per the requirement
             const lastOnline = `${year}-${month}-${day}-${hours}-${minutes}`;
 
+            const imageData = image && await convertImageToBase64(image);
+
             const response = await axios.post('http://127.0.0.1:5000/join', {
                 username,
                 password,
                 name,
+                image: imageData,
                 sex,
                 age,
                 location,
@@ -151,7 +169,10 @@ function JoinScreen() {
                     />
                 </div>
 
-
+                <div>
+                    <label htmlFor="image">Image:</label>
+                    <input type="file" id="image" accept="image/*" onChange={handleImageUpload} />
+                </div>
 
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <div className="field" style={{ display: "flex", alignItems: "center" }}>
