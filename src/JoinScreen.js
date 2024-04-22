@@ -117,7 +117,8 @@ function JoinScreen() {
             // Show dialog box based on the response
             if (success) {
                 window.alert('Congratulations, You have been registered!');
-                navigate('/main'); // Navigate to MainScreen
+                navigate('/preferences', { state: { username } });
+                //navigate('/main'); // Navigate to MainScreen
             } else {
                 window.alert('A user with similar details already exists.');
             }
