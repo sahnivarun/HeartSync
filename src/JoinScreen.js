@@ -115,7 +115,7 @@ function JoinScreen() {
             <h1>Join HeartSync</h1>
             <form onSubmit={handleJoin}>
                 <div>
-                    <label htmlFor="username">Username:</label>
+                    <label htmlFor="username">Username<span style={{ color: 'white' }}>*</span>:</label>
                     <input
                         type="text"
                         id="username"
@@ -128,7 +128,7 @@ function JoinScreen() {
                 <div style={{ marginBottom: '20px' }}></div>
 
                 <div>
-                    <label htmlFor="password">Password:</label>
+                    <label htmlFor="password">Password<span style={{ color: 'white' }}>*</span>:</label>
                     <input
                         type="password"
                         id="password"
@@ -356,7 +356,9 @@ function JoinScreen() {
                             value={height}
                             onChange={(e) => setHeight(e.target.value)}
                         />
+                        <span style={{ marginLeft: "5px" }}>Inches</span>
                     </div>
+
 
                     <div className="field" style={{ marginTop: "20px" }}>
                         <label htmlFor="income">Income:</label>
@@ -366,7 +368,9 @@ function JoinScreen() {
                             value={income}
                             onChange={(e) => setIncome(e.target.value)}
                         />
+                        <span style={{ marginLeft: "5px" }}>$ per annum</span>
                     </div>
+
 
                     <div className="field" style={{ marginTop: "20px" }}>
                         <label htmlFor="job">Job:</label>
@@ -481,6 +485,8 @@ function JoinScreen() {
                         />
                     </div>
 
+                    <div style={{ marginBottom: '20px' }}></div>
+
                     <div className="field" style={{ marginTop: "20px", marginBottom: "1px", width: "50%", margin: "auto", display: "flex", alignItems: "center" }}>
                         <label htmlFor="essay0" style={{ marginRight: "20px", width: "40%", textAlign: "right", fontSize: "0.7em" }}>Tell us about yourself:</label>
                         <textarea
@@ -491,6 +497,8 @@ function JoinScreen() {
                             style={{ width: "60%", padding: "8px", border: "1px solid #ccc", borderRadius: "4px", resize: "vertical" }}
                         ></textarea>
                     </div>
+
+                    <div style={{ marginBottom: '20px' }}></div>
 
                     <div className="field" style={{ marginTop: "21px", marginBottom: "1px", width: "50%", margin: "auto", display: "flex", alignItems: "center" }}>
                         <label htmlFor="essay1" style={{ marginRight: "20px", width: "40%", textAlign: "right", fontSize: "0.7em" }}>Describe Your daily routine:</label>
@@ -503,6 +511,8 @@ function JoinScreen() {
                         ></textarea>
                     </div>
 
+                    <div style={{ marginBottom: '20px' }}></div>
+
                     <div className="field" style={{ marginTop: "22px", marginBottom: "1px", width: "50%", margin: "auto", display: "flex", alignItems: "center" }}>
                         <label htmlFor="essay2" style={{ marginRight: "20px", width: "40%", textAlign: "right", fontSize: "0.7em" }}>What are you good at:</label>
                         <textarea
@@ -513,6 +523,8 @@ function JoinScreen() {
                             style={{ width: "60%", padding: "8px", border: "1px solid #ccc", borderRadius: "4px", resize: "vertical" }}
                         ></textarea>
                     </div>
+
+                    <div style={{ marginBottom: '20px' }}></div>
 
                     <div className="field" style={{ marginTop: "23px", marginBottom: "1px", width: "50%", margin: "auto", display: "flex", alignItems: "center" }}>
                         <label htmlFor="essay3" style={{ marginRight: "20px", width: "40%", textAlign: "right", fontSize: "0.7em" }}>Describe your appearance:</label>
@@ -525,6 +537,8 @@ function JoinScreen() {
                         ></textarea>
                     </div>
 
+                    <div style={{ marginBottom: '20px' }}></div>
+
                     <div className="field" style={{ marginTop: "24px", marginBottom: "1px", width: "50%", margin: "auto", display: "flex", alignItems: "center" }}>
                         <label htmlFor="essay4" style={{ marginRight: "20px", width: "40%", textAlign: "right", fontSize: "0.7em" }}>Describe your hobbies:</label>
                         <textarea
@@ -535,6 +549,8 @@ function JoinScreen() {
                             style={{ width: "60%", padding: "8px", border: "1px solid #ccc", borderRadius: "4px", resize: "vertical" }}
                         ></textarea>
                     </div>
+
+                    <div style={{ marginBottom: '20px' }}></div>
 
                     <div className="field" style={{ marginTop: "25px", marginBottom: "1px", width: "50%", margin: "auto", display: "flex", alignItems: "center" }}>
                         <label htmlFor="essay5" style={{ marginRight: "20px", width: "40%", textAlign: "right", fontSize: "0.7em" }}>Describe things you cannot live without:</label>
@@ -547,6 +563,8 @@ function JoinScreen() {
                         ></textarea>
                     </div>
 
+                    <div style={{ marginBottom: '20px' }}></div>
+
                     <div className="field" style={{ marginTop: "26px", marginBottom: "1px", width: "50%", margin: "auto", display: "flex", alignItems: "center" }}>
                         <label htmlFor="essay6" style={{ marginRight: "20px", width: "40%", textAlign: "right", fontSize: "0.7em" }}>What do you think about when idle:</label>
                         <textarea
@@ -557,6 +575,8 @@ function JoinScreen() {
                             style={{ width: "60%", padding: "8px", border: "1px solid #ccc", borderRadius: "4px", resize: "vertical" }}
                         ></textarea>
                     </div>
+
+                    <div style={{ marginBottom: '20px' }}></div>
 
                     <div className="field" style={{ marginTop: "31px", marginBottom: "4px", width: "50%", margin: "auto", display: "flex", alignItems: "center" }}>
                         <label htmlFor="essay7" style={{ marginRight: "20px", width: "40%", textAlign: "right", fontSize: "0.7em" }}>What do you do on Friday evening:</label>
@@ -569,6 +589,8 @@ function JoinScreen() {
                         ></textarea>
                     </div>
 
+                    <div style={{ marginBottom: '20px' }}></div>
+
                     <div className="field" style={{ marginTop: "35px", marginBottom: "4px", width: "50%", margin: "auto", display: "flex", alignItems: "center" }}>
                         <label htmlFor="essay8" style={{ marginRight: "20px", width: "40%", textAlign: "right", fontSize: "0.7em" }}>Tell us some interesting fact about you:</label>
                         <textarea
@@ -579,6 +601,8 @@ function JoinScreen() {
                             style={{ width: "60%", padding: "8px", border: "1px solid #ccc", borderRadius: "4px", resize: "vertical" }}
                         ></textarea>
                     </div>
+
+                    <div style={{ marginBottom: '20px' }}></div>
 
                     <div className="field" style={{ marginTop: "39px", marginBottom: "1px", width: "50%", margin: "auto", display: "flex", alignItems: "center" }}>
                         <label htmlFor="essay9" style={{ marginRight: "20px", width: "40%", textAlign: "right", fontSize: "0.7em" }}>Who should swipe you right:</label>
