@@ -57,6 +57,7 @@ function JoinScreen() {
             const response = await axios.post('http://127.0.0.1:5000/join', {
                 username,
                 password,
+                name,
                 sex,
                 age,
                 location,
@@ -123,6 +124,9 @@ function JoinScreen() {
                         required
                     />
                 </div>
+
+                <div style={{ marginBottom: '20px' }}></div>
+
                 <div>
                     <label htmlFor="password">Password:</label>
                     <input
@@ -133,6 +137,21 @@ function JoinScreen() {
                         required
                     />
                 </div>
+
+                <div style={{ marginBottom: '20px' }}></div>
+
+                <div>
+                    <label htmlFor="name">Name<span style={{ color: 'white' }}>*</span>:</label>
+                    <input
+                        type="text"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
+                </div>
+
+
 
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <div className="field" style={{ display: "flex", alignItems: "center" }}>
