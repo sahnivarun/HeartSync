@@ -164,5 +164,21 @@ sorted_combined_features_with_indices = scale_and_sort_combined_features(combine
 # Example to display sorted scores for user_0
 print(sorted_combined_features_with_indices[0])
 
+top_indices = [idx for score, idx in sorted_combined_features_with_indices[0] if idx != 0][:10]
 
+
+def get_user_profiles(indices):
+    conn = sqlite3.connect('users.db')
+    placeholders = ', '.join(['?' for _ in indices])  # Create placeholders for SQL query
+    query = f"SELECT username, age, body_type,diet,drinks,drugs,education,ethnicity,religion,job, ROWID FROM users WHERE ROWID IN ({placeholders})"
+    df_top_profiles = pd.read_sql_query(query, conn, params=indices)
+    conn.close()
+    return df_top_profiles
+
+
+
+
+# Fetch the top user profiles
+top_user_profiles = get_user_profiles(top_indices)
+print(top_user_profiles)
 
