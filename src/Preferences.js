@@ -34,8 +34,7 @@ function Preferences() {
                 if (success) {
                     setTargetAgeMin(user.target_age_min || '');
                     setTargetAgeMax(user.target_age_max || '');
-                    // setTargetSex(JSON.parse(user.target_sex || ''));
-                    setTargetSex(user.target_sex || ''); // Updated line
+                    setTargetSex(user.target_sex || '');
                     setTargetStatus(JSON.parse(user.target_status || '[]'));
                     setTargetOrientation(JSON.parse(user.target_orientation || '[]'));
                     setTargetDrinks(JSON.parse(user.target_drinks || '[]'));
