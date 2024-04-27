@@ -105,52 +105,40 @@ def join():
         add_user(username, password, name, image_path, sex, age, location, status, orientation, body_type, diet, drinks, drugs, education, ethnicity, height, income, job, offspring, pets, religion, sign, smokes, speaks, essay0, essay1, essay2, essay3, essay4, essay5, essay6, essay7, essay8, essay9, last_online)
         return jsonify({'success': True, 'message': 'User added successfully'})
 
-# Route for handling preference update requests
 @app.route('/preference', methods=['POST'])
 def update_preference():
     data = request.get_json()
     username = data['username']
-    target_age_min = data['target_age_min']
-    target_age_max = data['target_age_max']
-    target_sex = data['target_sex']
-    target_status = data['target_status']
-    target_orientation = data['target_orientation']
-    target_drinks = data['target_drinks']
-    target_drugs = data['target_drugs']
-    target_ethnicity = data['target_ethnicity']
-    target_height = data['target_height']
-    target_income = data['target_income']
-    target_offspring = data['target_offspring']
-    target_pets = data['target_pets']
-    target_religion = data['target_religion']
-    target_smokes = data['target_smokes']
-
-    # Serialize lists to strings
-    target_drinks_str = json.dumps(target_drinks)
-    target_drugs_str = json.dumps(target_drugs)
-    target_ethnicity_str = json.dumps(target_ethnicity)
-    target_offspring_str = json.dumps(target_offspring)
-    target_pets_str = json.dumps(target_pets)
-    target_religion_str = json.dumps(target_religion)
-    target_orientation_str = json.dumps(target_orientation)
-    target_sex_str = json.dumps(target_sex)
-    target_status_str = json.dumps(target_status)
-    target_smokes_str = json.dumps(target_smokes)
 
     # Connect to the database
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
 
-     # Update the user preferences in the database
-    cursor.execute("""
+    # Initialize the list to hold the columns and values to update
+    update_values = []
+
+    # Iterate through the received data and add non-empty values to the update list
+    for key, value in data.items():
+        if value:  # Check if the value is not empty
+            # Serialize lists to strings
+            if isinstance(value, list):
+                value = json.dumps(value)
+            update_values.append((key, value))
+
+    # Prepare the SQL update statement
+    columns = ', '.join([f"{column} = ?" for column, _ in update_values])
+    update_statement = f"""
         UPDATE users
-        SET target_age_min = ?, target_age_max = ?, target_sex = ?, target_status = ?, target_orientation = ?,
-            target_drinks = ?, target_drugs = ?, target_ethnicity = ?, target_height = ?, target_income = ?,
-            target_offspring = ?, target_pets = ?, target_religion = ?, target_smokes = ?
+        SET {columns}
         WHERE username = ?
-    """, (target_age_min, target_age_max, target_sex, target_status_str, target_orientation_str, target_drinks_str,
-          target_drugs_str, target_ethnicity_str, target_height, target_income, target_offspring_str, target_pets_str,
-          target_religion_str, target_smokes_str, username))
+    """
+
+    # Extract the values to update and add username at the end
+    update_params = [value for _, value in update_values]
+    update_params.append(username)
+
+    # Update the user preferences in the database
+    cursor.execute(update_statement, tuple(update_params))
 
     # Commit changes and close the database connection
     conn.commit()
