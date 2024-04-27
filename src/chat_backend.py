@@ -257,6 +257,72 @@ def calculate_recommendations(feature_weight):
     return result_profiles
 
 
+@app.route('/conversations', methods=['GET'])
+def get_conversations():
+    # Extract username from the query parameter
+    username = request.args.get('username')
+    if not username:
+        return jsonify({"error": "Username parameter is missing"}), 400
+
+    # Connect to the SQLite database
+    conn = sqlite3.connect('conversations.db')
+    cursor = conn.cursor()
+
+    # Prepare SQL query to find all unique users that the given user has talked to
+    query = """
+    SELECT DISTINCT User2 FROM conversations WHERE User1 = ?
+    UNION
+    SELECT DISTINCT User1 FROM conversations WHERE User2 = ?
+    """
+    cursor.execute(query, (username, username))
+    
+    # Fetch all results
+    users = cursor.fetchall()
+    # Convert the result into a simple list
+    user_list = [user[0] for user in users if user[0] != username]  # exclude the requesting user from the list
+
+    # Close the database connection
+    conn.close()
+
+    # Return the list of users as a JSON response
+    return jsonify({"conversations_with": user_list})
+
+
+@app.route('/messages', methods=['GET'])
+def get_messages():
+    user1 = request.args.get('User1')
+    user2 = request.args.get('User2')
+
+    if not user1 or not user2:
+        return jsonify({"error": "Missing parameters"}), 400
+
+    # Connect to the SQLite database
+    conn = sqlite3.connect('conversations.db')
+    cursor = conn.cursor()
+
+    # Prepare SQL query to find conversations between the two users
+    query = """
+    SELECT User1, Timestamp, Message FROM conversations
+    WHERE (User1 = ? AND User2 = ?) OR (User1 = ? AND User2 = ?)
+    ORDER BY Timestamp DESC
+    """
+    cursor.execute(query, (user1, user2, user2, user1))
+
+    # Fetch all results
+    conversations = cursor.fetchall()
+
+    # Close the database connection
+    conn.close()
+
+    # Prepare response
+    result = [{'sender': sender, 'timestamp': ts, 'message': msg} for sender, ts, msg in conversations]
+
+    # Return the conversations as a JSON response
+    return jsonify(result)
+
+
+
+
 if __name__ == "__main__":
     socketio.run(app, debug=True)
 
