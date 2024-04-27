@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -23,10 +23,40 @@ function Preferences() {
     const [target_smokes, setTargetSmokes] = useState('');
 
     const [responseMessage, setResponseMessage] = useState('');
+    const [userDetails, setUserDetails] = useState(null);
 
-    // const handleSubmit = () => {
-    //     navigate('/main', { state: { username } });
-    // };
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/user/${username}`);
+                const { success, user } = response.data;
+
+                if (success) {
+                    setTargetAgeMin(user.target_age_min || '');
+                    setTargetAgeMax(user.target_age_max || '');
+                    setTargetSex(JSON.parse(user.target_sex || '[]'));
+                    setTargetStatus(JSON.parse(user.target_status || '[]'));
+                    setTargetOrientation(JSON.parse(user.target_orientation || '[]'));
+                    setTargetDrinks(JSON.parse(user.target_drinks || '[]'));
+                    setTargetDrugs(JSON.parse(user.target_drugs || '[]'));
+                    setTargetEthnicity(JSON.parse(user.target_ethnicity || '[]'));
+                    setTargetHeight(user.target_height || '');
+                    setTargetIncome(user.target_income || '');
+                    setTargetOffspring(JSON.parse(user.target_offspring || '[]'));
+                    setTargetPets(JSON.parse(user.target_pets || '[]'));
+                    setTargetReligion(JSON.parse(user.target_religion || '[]'));
+                    setTargetSmokes(JSON.parse(user.target_smokes || '[]'));
+                } else {
+                    console.error('Failed to fetch user details');
+                }
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+            }
+        };
+
+        fetchUserDetails();
+    }, [username]);
+
 
     const handleOrientationChange = (value) => {
         // Toggle the value in the target_orientation state variable
@@ -41,8 +71,6 @@ function Preferences() {
             }
         });
     };
-
-// Similarly, define the other handler functions with the same logic
 
     const handleStatusChange = (value) => {
         setTargetStatus((prevStatus) => {
