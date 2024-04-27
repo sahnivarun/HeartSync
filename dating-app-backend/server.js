@@ -20,17 +20,36 @@ const sequelize = new Sequelize('dating_application', '', '', {
 });
 
 // Define models
-const User = sequelize.define('User', {
-  name: DataTypes.STRING,
-  avatar: DataTypes.STRING,
-  bio: DataTypes.TEXT
-});
+// const User = sequelize.define('User', {
+//   name: DataTypes.STRING,
+//   avatar: DataTypes.STRING,
+//   bio: DataTypes.TEXT
+// });
 
 // Define models
 const UserProfiles = sequelize.define('user_profiles', {
-  age: DataTypes.STRING,
+  name: DataTypes.STRING,
+  avatar: DataTypes.STRING,
+  essay0: DataTypes.TEXT,
+  age: DataTypes.INTEGER,
   status: DataTypes.STRING,
-  sex: DataTypes.TEXT
+  sex: DataTypes.STRING,
+  orientation: DataTypes.STRING,
+  location: DataTypes.STRING,
+  body_type: DataTypes.STRING,
+  height: DataTypes.STRING,
+  diet: DataTypes.STRING,
+  drinks: DataTypes.STRING,
+  drugs: DataTypes.STRING,
+  smokes: DataTypes.STRING,
+  education: DataTypes.STRING,
+  job: DataTypes.STRING,
+  ethnicity: DataTypes.STRING,
+  religion: DataTypes.STRING,
+  offspring: DataTypes.STRING,
+  pets: DataTypes.STRING,
+  speaks: DataTypes.STRING,
+  sign: DataTypes.STRING
 });
 
 const Like = sequelize.define('Like', {
@@ -54,7 +73,6 @@ app.get('/profiles', async (req, res) => {
         }
       }
     });
-    console.log("profiles ", profiles);
     res.status(200).json({ profiles });
   } catch (error) {
     console.error('Error fetching profiles:', error);
