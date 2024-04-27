@@ -1,79 +1,130 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import { format, parseISO } from 'date-fns'; // Importing necessary functions
 
-// Connect to the Socket.IO server
 const socket = io.connect('http://localhost:5000');
 
-function Chat() {
+function Chat({ otherUser, current, initialMessages }) {
     const [userInput, setUserInput] = useState('');
     const [messages, setMessages] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
     const [userName, setUserName] = useState('');
 
     useEffect(() => {
+        // Only set initial messages if the messages array is empty
+        if (messages.length === 0) {
+            const formattedInitialMessages = initialMessages.map(msg => ({
+                ...msg,
+                name: msg.sender, // Ensure this is consistent
+                timestampFormatted: format(parseISO(msg.timestamp), 'd MMMM p')
+            }));
+            setMessages(formattedInitialMessages);
+        }
+    
         socket.on('assign_name', (data) => {
             setUserName(data.name);
         });
-
+    
         socket.on('message', (message) => {
-            setMessages((prevMessages) => [...prevMessages, message]);
+            console.log('Received message:', message);
+            if (message.name === otherUser || message.name === userName) {
+                message.timestampFormatted = format(parseISO(message.timestamp), 'd MMMM p');
+                // Check if the message is already in the state to avoid duplication
+                if (!messages.find(m => m.timestamp === message.timestamp && m.content === message.content)) {
+                    setMessages(prevMessages => [...prevMessages, message]);
+                }
+            }
         });
-
+    
         return () => {
             socket.off('assign_name');
             socket.off('message');
         };
-    }, []);
+    }, [otherUser, userName, initialMessages, messages]);
+
+
+    const formattedConversation = messages.map(msg => ({
+        name: msg.name,
+        message: msg.content || msg.message,  // Fallback to `message` if `content` is undefined
+        timestamp: msg.timestamp,
+        sender: msg.sender
+    }));
 
     const sendMessage = (e) => {
         e.preventDefault();
         if (!userInput.trim()) return;
     
-        // Create a message object including the user's name and input
-        const message = { name: `${userName} (you)`, content: userInput };
+        const message = { 
+            name: current, 
+            content: userInput, 
+            timestamp: new Date().toISOString(),
+            receiver: otherUser // Assuming 'otherUser' is the receiver
+        };
+        message.timestampFormatted = format(parseISO(message.timestamp), 'd MMMM p');
     
-        // Add the message to the local state to immediately show it on the sender's screen
         setMessages((prevMessages) => [...prevMessages, message]);
     
         // Emit the message to the server to be broadcasted to other users
-        // Emit without appending "(you)" so other users don't see this annotation
-        socket.emit('message', { name: userName, content: userInput });
+        socket.emit('message', { name: userName, content: userInput, timestamp: message.timestamp });
+    
+        // Save the conversation via API call
+        fetch('http://localhost:5000/saveconversation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                User1: current,
+                User2: otherUser,
+                Timestamp: message.timestamp,
+                Message: userInput
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Save successful:', data);
+        })
+        .catch(error => {
+            console.error('Error saving conversation:', error);
+        });
     
         // Clear the user input after sending the message
         setUserInput('');
     };
 
     const askAssistant = () => {
-      fetch('http://localhost:5000/ask-assistant', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ conversation: messages }),
-      })
-      .then(response => response.json())
-      .then(data => {
-        setSuggestions(data.suggestions);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+        fetch('http://localhost:5000/ask-assistant', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ conversation: formattedConversation }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            setSuggestions(data.suggestions);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     };
 
-    // Function to handle suggestion selection
     const handleSuggestionClick = (suggestion) => {
-      setUserInput(suggestion);
-      setSuggestions([]);
+        setUserInput(suggestion);
+        setSuggestions([]);
     };
 
     return (
         <div>
-            <ul>
-                {messages.map((msg, index) => (
+            <ul style={{ listStyleType: 'none', padding: 0 }}>
+            {messages.map((msg, index) => (
+                msg.content ? (
                     <li key={index}>
-                        <b>{msg.name === userName ? `${msg.name} (you)` : msg.name}:</b> {msg.content}
+                        <span>({msg.timestampFormatted})</span>
+                        <b> {msg.name}: </b> {msg.content}
                     </li>
-                ))}
+                ) : null
+            ))}
             </ul>
             <form onSubmit={sendMessage}>
                 <input
@@ -86,7 +137,7 @@ function Chat() {
             </form>
             <button onClick={askAssistant}>Ask HeartSynch Assistant ❤️</button>
             {suggestions.length > 0 && (
-                <ul>
+                <ul style={{ listStyleType: 'none', padding: 0 }}>
                     {suggestions.map((suggestion, index) => (
                         <li key={index} style={{ cursor: 'pointer' }} onClick={() => handleSuggestionClick(suggestion)}>
                             {suggestion}

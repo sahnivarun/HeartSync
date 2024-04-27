@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { format, parseISO } from 'date-fns';  // Import format and parseISO functions
+import Chat from './Chat'; // Import Chat component
 
 function Inbox() {
-    const currentUser = "15";  // Set the current user
+    const currentUser = "15";
     const [users, setUsers] = useState([]);
-    const [messages, setMessages] = useState([]);  // State to store messages
+    const [messages, setMessages] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);  // Track the selected user for chatting
 
     useEffect(() => {
-        // Fetch the conversation partners
         axios.get(`http://localhost:5000/conversations?username=${currentUser}`)
             .then(response => {
                 setUsers(response.data.conversations_with);
@@ -46,9 +47,9 @@ function Inbox() {
 
     const handleUserClick = (otherUser) => {
         console.log(`Fetching messages between User1: ${currentUser} and User2: ${otherUser}`);
+        setSelectedUser(otherUser);  // Set the currently selected user
         axios.get(`http://localhost:5000/messages?User1=${currentUser}&User2=${otherUser}`)
             .then(response => {
-                // Set the messages into the state
                 setMessages(response.data);
             })
             .catch(error => {
@@ -61,7 +62,7 @@ function Inbox() {
             <h1>Conversations</h1>
             <div style={boxStyle}>
                 <div style={userListStyle}>
-                <h2>Your Matches</h2>                    
+                    <h2>Your Matches</h2>
                     {users.map((user, index) => (
                         <div key={index} style={{ padding: '10px', border: '1px solid grey', marginBottom: '5px', cursor: 'pointer' }}
                              onClick={() => handleUserClick(user)}>
@@ -70,12 +71,13 @@ function Inbox() {
                     ))}
                 </div>
                 <div style={messageAreaStyle}>
-                    {/* Display messages here */}
                     {messages.map((msg, index) => (
                         <div key={index} style={{ marginBottom: '10px' }}>
                             ({format(parseISO(msg.timestamp), 'dd MMMM p')}) {msg.sender}: {msg.message}
                         </div>
                     ))}
+                    {/* Include the Chat component */}
+                    {selectedUser && <Chat otherUser={selectedUser} current={currentUser} initialMessages={messages} />}
                 </div>
             </div>
         </div>

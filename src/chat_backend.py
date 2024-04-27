@@ -169,8 +169,8 @@ def ask_assistant():
     if not current_conversation:
         return jsonify({"error": "No conversation provided"}), 400
 
-    # Adjusted to use 'name' instead of 'role'
-    conversation_text = "\n".join([f"{msg['name']}: {msg['content']}" for msg in current_conversation])
+    # Handle potential key errors by providing a default empty string if 'message' key is missing
+    conversation_text = "\n".join([f"{msg.get('name', '')}: {msg.get('message', '')}" for msg in current_conversation])
     prompt = f"Give 5 suggestions for User A to reply based on the following conversation:\n{conversation_text}\nSuggestions:"
 
     response = client.chat.completions.create(
@@ -301,10 +301,11 @@ def get_messages():
     cursor = conn.cursor()
 
     # Prepare SQL query to find conversations between the two users
+    # Ensure sorting is accurate by treating Timestamp as a datetime
     query = """
     SELECT User1, Timestamp, Message FROM conversations
     WHERE (User1 = ? AND User2 = ?) OR (User1 = ? AND User2 = ?)
-    ORDER BY Timestamp DESC
+    ORDER BY datetime(Timestamp) ASC  
     """
     cursor.execute(query, (user1, user2, user2, user1))
 
@@ -319,6 +320,44 @@ def get_messages():
 
     # Return the conversations as a JSON response
     return jsonify(result)
+
+
+@app.route('/saveconversation', methods=['POST'])
+def save_conversation():
+    data = request.get_json()
+    user1 = data.get('User1')
+    user2 = data.get('User2')
+    timestamp = data.get('Timestamp')
+    message = data.get('Message')
+
+    # Validate data
+    if not all([user1, user2, timestamp, message]):
+        return jsonify({"error": "Missing data"}), 400
+
+    # Connect to the SQLite database
+    conn = sqlite3.connect('conversations.db')
+    cursor = conn.cursor()
+
+    # Create table if not exists (optional, run once)
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS conversations (
+        User1 TEXT,
+        User2 TEXT,
+        Timestamp TEXT,
+        Message TEXT
+    )
+    ''')
+
+    # Insert the new conversation
+    cursor.execute('''
+    INSERT INTO conversations (User1, User2, Timestamp, Message) 
+    VALUES (?, ?, ?, ?)
+    ''', (user1, user2, timestamp, message))
+
+    conn.commit()  # Commit the transaction
+    conn.close()  # Close the database connection
+
+    return jsonify({"success": "Conversation saved"}), 201
 
 
 
