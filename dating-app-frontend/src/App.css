@@ -1,4 +1,4 @@
-/* App.css
+/* App.css */
 
 /* Container styles */
 .app {
@@ -9,15 +9,42 @@
   background-color: #f5f5f5;
 }
 
+/* Profile card container styles */
+.profile-card-container {
+  height: 80vh; /* Adjust the height as needed */
+  overflow-y: auto; /* Enable vertical scrolling */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Profile card styles */
 .profile-card {
+  height: 400px; /* Fixed height */
+  width: 400px; /* Fixed width */
   background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  max-width: 400px;
-  width: 100%;
+  max-width: 100%; /* Allow card to shrink if viewport is smaller */
   text-align: center;
+  overflow-y: auto; /* Enable vertical scrolling if content exceeds height */
+}
+
+/* Divider styles */
+.divider {
+  width: 100%;
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+/* About title styles */
+.about-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 10px;
 }
 
 /* Profile image styles */
@@ -45,8 +72,13 @@
 
 /* Action button styles */
 .actions {
+  position: fixed; /* Position fixed within the viewport */
+  bottom: 20px; /* Adjust the distance from the bottom as needed */
+  left: 50%; /* Align to the center horizontally */
+  transform: translateX(-50%); /* Center horizontally */
   display: flex;
   justify-content: center;
+  z-index: 1000; /* Ensure buttons appear above other content */
 }
 
 .button {
@@ -55,7 +87,7 @@
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 34px;
   background-color: transparent;
 }
 
