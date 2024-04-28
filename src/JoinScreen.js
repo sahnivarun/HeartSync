@@ -128,7 +128,6 @@ function JoinScreen() {
         }
     };
 
-
     return (
         <div className="join-container">
             <h1>Join HeartSync</h1>
