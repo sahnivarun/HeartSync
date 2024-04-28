@@ -306,6 +306,7 @@ function JoinScreen() {
                         </select>
                     </div>
 
+
                     <div className="field categorical" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px" }}>
                         <label htmlFor="drinks" style={{ marginRight: "10px" }}>Drinks:</label>
                         <select
