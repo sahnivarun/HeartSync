@@ -13,10 +13,14 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Sequelize setup
-const sequelize = new Sequelize('dating_application', '', '', {
-  dialect: 'postgres',
-  host: 'localhost',
-  port: 5432,
+// const sequelize = new Sequelize('dating_application', '', '', {
+//   dialect: 'postgres',
+//   host: 'localhost',
+//   port: 5432,
+// });
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: '/Users/niharchauhan/Documents/HeartSync/users.db' // Path to your SQLite database file
 });
 
 // Define models
@@ -27,9 +31,8 @@ const sequelize = new Sequelize('dating_application', '', '', {
 // });
 
 // Define models
-const UserProfiles = sequelize.define('user_profiles', {
+const Users = sequelize.define('users', {
   name: DataTypes.STRING,
-  avatar: DataTypes.STRING,
   essay0: DataTypes.TEXT,
   age: DataTypes.INTEGER,
   status: DataTypes.STRING,
@@ -49,7 +52,9 @@ const UserProfiles = sequelize.define('user_profiles', {
   offspring: DataTypes.STRING,
   pets: DataTypes.STRING,
   speaks: DataTypes.STRING,
-  sign: DataTypes.STRING
+  sign: DataTypes.STRING,
+  username: DataTypes.TEXT,
+  password: DataTypes.TEXT
 });
 
 const Like = sequelize.define('Like', {
@@ -61,15 +66,18 @@ const Match = sequelize.define('Match', {
 });
 
 // Define associations
-UserProfiles.belongsToMany(UserProfiles, { through: Like, as: 'Liker', foreignKey: 'userId' });
-UserProfiles.belongsToMany(UserProfiles, { through: Like, as: 'Liked', foreignKey: 'likedUserId' });
+Users.belongsToMany(Users, { through: Like, as: 'Liker', foreignKey: 'username' });
+Users.belongsToMany(Users, { through: Like, as: 'Liked', foreignKey: 'likedUsername' });
 
 app.get('/profiles', async (req, res) => {
   try {
-    const profiles = await UserProfiles.findAll({
+    const profiles = await Users.findAll({
+      attributes: {
+        exclude: ['id', 'createdAt', 'updatedAt'] // Exclude the id column from the SELECT query
+      },
       where: {
-        id: {
-          [Sequelize.Op.ne]: 3 // Show only recommended profiles except for his/her own profile
+        username: {
+          [Sequelize.Op.ne]: 'user84335' // Show only recommended profiles except for his/her own profile
         }
       }
     });
@@ -82,12 +90,12 @@ app.get('/profiles', async (req, res) => {
 
 // Define routes
 app.post('/like', async (req, res) => {
-  const { userId, likedUserId, liked } = req.body;
-  console.log("userId ", userId);
-  console.log("likedUserId ", likedUserId);
+  const { username, likedUsername, liked } = req.body;
+  console.log("userId ", username);
+  console.log("likedUserId ", likedUsername);
   console.log("liked ", liked);
   try {
-    await Like.create({ userId, likedUserId, liked });
+    await Like.create({ username, likedUsername, liked });
     // await User.destroy({ where: { id: likedUserId } });
     res.status(200).json({ message: 'Like saved successfully' });
   } catch (error) {
@@ -97,13 +105,41 @@ app.post('/like', async (req, res) => {
 });
 
 app.post('/dislike', async (req, res) => {
-  const { userId, likedUserId, liked } = req.body;
+  const { username, likedUsername, liked } = req.body;
   try {
-    await Like.create({ userId, likedUserId, liked });
+    await Like.create({ username, likedUsername, liked });
     // await User.destroy({ where: { id: likedUserId } });
     res.status(200).json({ message: 'Dislike saved successfully' });
   } catch (error) {
     console.error('Error saving dislike:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/match/:likedUsername', async (req, res) => {
+  // const likedUserId = likedUserId;
+  // console.log("likedUserId ", likedUserId);
+  const likedUsername = req.params.likedUsername;
+  console.log("likedUsername ", likedUsername);
+
+  try {
+    // Check if there's a mutual like between the operating user and the liked user
+    const mutualLike = await Like.findOne({
+      where: {
+        username: likedUsername, // Operating user's ID
+        likedUsername: 'user84335' // Assuming you have authentication middleware that sets req.user
+      }
+    });
+
+    console.log("mutualLike ", mutualLike);
+
+    if (mutualLike) {
+      res.status(200).json({ match: true });
+    } else {
+      res.status(200).json({ match: false });
+    }
+  } catch (error) {
+    console.error('Error checking for match:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

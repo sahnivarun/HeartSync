@@ -9,6 +9,7 @@ import { faCheck, faTimes, faExclamationCircle } from '@fortawesome/free-solid-s
 const App = () => {
   const [profiles, setProfiles] = useState([]);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
+  const [matchPopup, setMatchPopup] = useState(false);
 
   useEffect(() => {
     // Fetch profiles from your server
@@ -24,27 +25,50 @@ const App = () => {
     }
   };
 
-  const handleLike = async (userId) => {
+  const handleLike = async (username) => {
     try {
-      console.log("User ID ", userId);
-      await axios.post('http://localhost:5001/like', { userId: 3, likedUserId: userId, liked: true });
+      console.log("User Name ", username);
+      await axios.post('http://localhost:5001/like', { username: 'user84335', likedUsername: username, liked: true });
+      checkForMatch(username);
       setCurrentProfileIndex(currentProfileIndex + 1);
     } catch (error) {
       console.error('Error liking profile:', error);
     }
   };
 
-  const handleDislike = async (userId) => {
+  const handleDislike = async (username) => {
     try {
-      await axios.post('http://localhost:5001/dislike', { userId: 3, likedUserId: userId, liked: false });
+      await axios.post('http://localhost:5001/dislike', { username: 'user84335', likedUsername: username, liked: false });
       setCurrentProfileIndex(currentProfileIndex + 1);
     } catch (error) {
       console.error('Error disliking profile:', error);
     }
   };
 
+  const checkForMatch = async (likedUsername) => {
+    try {
+      const response = await axios.get(`http://localhost:5001/match/${likedUsername}`);
+      if (response.data.match) {
+        setMatchPopup(true); // Show match popup if there's a match
+      }
+    } catch (error) {
+      console.error('Error checking for match:', error);
+    }
+  };
+
+  const handleClosePopup = () => {
+    setMatchPopup(false);
+    setCurrentProfileIndex(currentProfileIndex + 1); // Increment profile index after closing popup
+  };
+
   return (
     <div className="app">
+      {matchPopup && (
+        <div className="match-popup">
+          <p>Congratulations! It's a match!</p>
+          <button onClick={() => setMatchPopup(false)}>Close</button>
+        </div>
+      )}
       <div className="profile-card-container">
       {profiles.length > 0 && currentProfileIndex < profiles.length && (
         <div className="profile-card">
@@ -133,10 +157,10 @@ const App = () => {
             )}
           </div>
           <div className="actions">
-            <button className="button like-button" onClick={() => handleLike(profiles[currentProfileIndex].id)}>
+            <button className="button like-button" onClick={() => handleLike(profiles[currentProfileIndex].username)}>
               <FontAwesomeIcon icon={faCheck} />
             </button>
-            <button className="button dislike-button" onClick={() => handleDislike(profiles[currentProfileIndex].id)}>
+            <button className="button dislike-button" onClick={() => handleDislike(profiles[currentProfileIndex].username)}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
             {/* <button className="button report-button">
