@@ -7,7 +7,6 @@ import base64
 import os
 import json
 
-
 app = Flask(__name__)
 CORS(app) 
 
