@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="50589a3b-a712-4566-9b47-861d6b537bbc" name="Changes" comment="Updated Db" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Varun" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;sahnivarun&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="8548f922-dd76-4afb-b112-99e90b0b34b9" />
+        <option name="url" value="https://github.com/sahnivarun/HeartSync" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2eo07NH72b4TVr0cIDckla9HIwa" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "varun__after__merger",
+    "last_opened_file_path": "C:/Users/Varun Sahni/Documents/heart-sync-app",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.2.5\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="50589a3b-a712-4566-9b47-861d6b537bbc" name="Changes" comment="" />
+      <created>1712555454893</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1712555454893</updated>
+      <workItem from="1712555455966" duration="4858000" />
+      <workItem from="1712561026666" duration="965000" />
+      <workItem from="1712611085713" duration="223000" />
+      <workItem from="1712623583208" duration="765000" />
+      <workItem from="1713667035711" duration="1772000" />
+      <workItem from="1713712843796" duration="40618000" />
+      <workItem from="1713824949711" duration="9310000" />
+      <workItem from="1713843683090" duration="77000" />
+      <workItem from="1713897901968" duration="211000" />
+      <workItem from="1713921865149" duration="26000" />
+      <workItem from="1714214585633" duration="3834000" />
+      <workItem from="1714218534299" duration="4000" />
+      <workItem from="1714239157858" duration="7465000" />
+      <workItem from="1714255878506" duration="1486000" />
+      <workItem from="1714257397424" duration="9719000" />
+      <workItem from="1714272407989" duration="256000" />
+      <workItem from="1714277250445" duration="439000" />
+      <workItem from="1714286803016" duration="228000" />
+      <workItem from="1714296078916" duration="504000" />
+      <workItem from="1714296879052" duration="2600000" />
+      <workItem from="1714301939903" duration="749000" />
+    </task>
+    <task id="LOCAL-00001" summary="Same page">
+      <option name="closed" value="true" />
+      <created>1712623618276</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1712623618276</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Adding Users to DB raw.">
+      <option name="closed" value="true" />
+      <created>1713719623438</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1713719623438</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Adding Users to DB without sex, orientation, and last active on.">
+      <option name="closed" value="true" />
+      <created>1713741963957</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1713741963957</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Adding Users to DB without last active on.">
+      <option name="closed" value="true" />
+      <created>1713742764127</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1713742764127</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Adding Users to db completed.">
+      <option name="closed" value="true" />
+      <created>1713743234825</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1713743234825</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Adding Users to db completed with name.">
+      <option name="closed" value="true" />
+      <created>1713747826943</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1713747826943</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Adding Users to db completed with income and height units.">
+      <option name="closed" value="true" />
+      <created>1713748673880</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1713748673880</updated>
+    </task>
+    <task id="LOCAL-00008" summary="saving image raw">
+      <option name="closed" value="true" />
+      <created>1713755174089</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1713755174089</updated>
+    </task>
+    <task id="LOCAL-00009" summary="saving image raw">
+      <option name="closed" value="true" />
+      <created>1713765311517</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1713765311517</updated>
+    </task>
+    <task id="LOCAL-00010" summary="session variable declared">
+      <option name="closed" value="true" />
+      <created>1713765652860</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1713765652860</updated>
+    </task>
+    <task id="LOCAL-00011" summary="routings completed">
+      <option name="closed" value="true" />
+      <created>1713768297497</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1713768297497</updated>
+    </task>
+    <task id="LOCAL-00012" summary="routings completed">
+      <option name="closed" value="true" />
+      <created>1713768314554</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1713768314554</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Preferences completed">
+      <option name="closed" value="true" />
+      <created>1713775107715</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1713775107715</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Adding GET request in server">
+      <option name="closed" value="true" />
+      <created>1713826444498</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1713826444498</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Auto-Populating age field in Preferences">
+      <option name="closed" value="true" />
+      <created>1714240311258</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1714240311258</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Auto-Populating height &amp; income fields in Preferences">
+      <option name="closed" value="true" />
+      <created>1714241385245</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1714241385245</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Preferences Updation fixed.">
+      <option name="closed" value="true" />
+      <created>1714242740526</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1714242740526</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Preferences update sex fixed.">
+      <option name="closed" value="true" />
+      <created>1714243561284</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1714243561284</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Preferences update sex fixed.">
+      <option name="closed" value="true" />
+      <created>1714250427688</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1714250427688</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Preferences update sex fixed.">
+      <option name="closed" value="true" />
+      <created>1714256175311</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1714256175312</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Preferences update sex fixed.">
+      <option name="closed" value="true" />
+      <created>1714257164434</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1714257164434</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Preferences update sex fixed.">
+      <option name="closed" value="true" />
+      <created>1714259025708</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1714259025708</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Preferences update sex fixed.">
+      <option name="closed" value="true" />
+      <created>1714260653835</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1714260653835</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Preferences update sex fixed.">
+      <option name="closed" value="true" />
+      <created>1714260713252</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1714260713252</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Preferences update sex fixed.">
+      <option name="closed" value="true" />
+      <created>1714264998041</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1714264998041</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Preferences update sex fixed.">
+      <option name="closed" value="true" />
+      <created>1714265004711</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1714265004711</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Preferences update sex fixed.">
+      <option name="closed" value="true" />
+      <created>1714265592303</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1714265592303</updated>
+    </task>
+    <task id="LOCAL-00028" summary="before merger">
+      <option name="closed" value="true" />
+      <created>1714266734724</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1714266734724</updated>
+    </task>
+    <task id="LOCAL-00029" summary="before merger">
+      <option name="closed" value="true" />
+      <created>1714266768562</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1714266768562</updated>
+    </task>
+    <task id="LOCAL-00030" summary="before merger">
+      <option name="closed" value="true" />
+      <created>1714266877459</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1714266877459</updated>
+    </task>
+    <task id="LOCAL-00031" summary="before merger">
+      <option name="closed" value="true" />
+      <created>1714266893845</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1714266893845</updated>
+    </task>
+    <task id="LOCAL-00032" summary="before merger2">
+      <option name="closed" value="true" />
+      <created>1714267518491</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1714267518491</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Updated Db">
+      <option name="closed" value="true" />
+      <created>1714301974064</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1714301974064</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="Varun" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Same page" />
+    <MESSAGE value="Adding Users to DB raw." />
+    <MESSAGE value="Adding Users to DB without sex, orientation, and last active on." />
+    <MESSAGE value="Adding Users to DB without last active on." />
+    <MESSAGE value="Adding Users to db completed." />
+    <MESSAGE value="Adding Users to db completed with name." />
+    <MESSAGE value="Adding Users to db completed with income and height units." />
+    <MESSAGE value="saving image raw" />
+    <MESSAGE value="session variable declared" />
+    <MESSAGE value="routings completed" />
+    <MESSAGE value="Preferences completed" />
+    <MESSAGE value="Adding GET request in server" />
+    <MESSAGE value="Auto-Populating age field in Preferences" />
+    <MESSAGE value="Auto-Populating height &amp; income fields in Preferences" />
+    <MESSAGE value="Preferences Updation fixed." />
+    <MESSAGE value="Preferences update sex fixed." />
+    <MESSAGE value="before merger" />
+    <MESSAGE value="before merger2" />
+    <MESSAGE value="Updated Db" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated Db" />
+  </component>
+</project>
