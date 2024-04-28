@@ -9,7 +9,8 @@ function Preferences() {
 
     const [target_age_min, setTargetAgeMin] = useState('');
     const [target_age_max, setTargetAgeMax] = useState('');
-    const [target_sex, setTargetSex] = useState('');
+    // const [target_sex, setTargetSex] = useState('');
+    const [target_sex, setTargetSex] = useState([]);
     const [target_status, setTargetStatus] = useState('');
     const [target_orientation, setTargetOrientation] = useState('');
     const [target_drinks, setTargetDrinks] = useState('');
@@ -58,6 +59,16 @@ function Preferences() {
         fetchUserDetails();
     }, [username]);
 
+    const handleCheckboxChange = (value) => {
+        // Check if the value is already in the state
+        if (target_sex.includes(value)) {
+            // If it is, remove it
+            setTargetSex(target_sex.filter(item => item !== value));
+        } else {
+            // If it's not, add it
+            setTargetSex([...target_sex, value]);
+        }
+    };
 
     const handleOrientationChange = (value) => {
         // Toggle the value in the target_orientation state variable
@@ -199,26 +210,6 @@ function Preferences() {
             <h1>Who are you looking for, {username}?</h1>
             <form onSubmit={handleSubmit}>
 
-                {/*<div style={{ display: "flex", justifyContent: "center" }}>*/}
-                {/*    <div className="field" style={{ display: "flex", alignItems: "center" }}>*/}
-                {/*        <label htmlFor="target_sex" style={{ marginRight: "10px" }}>Sex<span>*</span>:</label>*/}
-                {/*        <ul className="options" style={{ display: "flex", listStyle: "none", padding: 0 }}>*/}
-                {/*            <li style={{ marginRight: "10px" }}>*/}
-                {/*                <input type="checkbox" id="male" name="target_sex" value="male" onChange={(e) => setTargetSex(e.target.value)} />*/}
-                {/*                <label htmlFor="male" style={{ fontSize: "0.9em" }}>Male</label>*/}
-                {/*            </li>*/}
-                {/*            <li style={{ marginRight: "10px" }}>*/}
-                {/*                <input type="checkbox" id="female" name="target_sex" value="female" onChange={(e) => setTargetSex(e.target.value)} />*/}
-                {/*                <label htmlFor="female" style={{ fontSize: "0.9em" }}>Female</label>*/}
-                {/*            </li>*/}
-                {/*            <li>*/}
-                {/*                <input type="checkbox" id="nonbinary" name="target_sex" value="nonbinary" onChange={(e) => setTargetSex(e.target.value)} />*/}
-                {/*                <label htmlFor="nonbinary" style={{ fontSize: "0.9em" }}>Nonbinary</label>*/}
-                {/*            </li>*/}
-                {/*        </ul>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
-
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <div className="field" style={{ display: "flex", alignItems: "center" }}>
                         <label htmlFor="target_sex" style={{ marginRight: "10px" }}>Sex<span>*</span>:</label>
@@ -226,35 +217,35 @@ function Preferences() {
                             <li style={{ marginRight: "10px" }}>
                                 <input
                                     type="checkbox"
-                                    id="male"
+                                    id="Male"
                                     name="target_sex"
-                                    value="male"
-                                    checked={target_sex === 'male'} // Ensure checkbox reflects the state correctly
-                                    onChange={(e) => setTargetSex(e.target.value)} // Update state based on checkbox change
+                                    value="Male"
+                                    checked={target_sex.includes('Male')}
+                                    onChange={() => handleCheckboxChange('Male')}
                                 />
-                                <label htmlFor="male" style={{ fontSize: "0.9em" }}>Male</label>
+                                <label htmlFor="Male" style={{ fontSize: "0.9em" }}>Male</label>
                             </li>
                             <li style={{ marginRight: "10px" }}>
                                 <input
                                     type="checkbox"
-                                    id="female"
+                                    id="Female"
                                     name="target_sex"
-                                    value="female"
-                                    checked={target_sex === 'female'} // Ensure checkbox reflects the state correctly
-                                    onChange={(e) => setTargetSex(e.target.value)} // Update state based on checkbox change
+                                    value="Female"
+                                    checked={target_sex.includes('Female')}
+                                    onChange={() => handleCheckboxChange('Female')}
                                 />
-                                <label htmlFor="female" style={{ fontSize: "0.9em" }}>Female</label>
+                                <label htmlFor="Female" style={{ fontSize: "0.9em" }}>Female</label>
                             </li>
                             <li>
                                 <input
                                     type="checkbox"
-                                    id="nonbinary"
+                                    id="Nonbinary"
                                     name="target_sex"
-                                    value="nonbinary"
-                                    checked={target_sex === 'nonbinary'} // Ensure checkbox reflects the state correctly
-                                    onChange={(e) => setTargetSex(e.target.value)} // Update state based on checkbox change
+                                    value="Nonbinary"
+                                    checked={target_sex.includes('Nonbinary')}
+                                    onChange={() => handleCheckboxChange('Nonbinary')}
                                 />
-                                <label htmlFor="nonbinary" style={{ fontSize: "0.9em" }}>Nonbinary</label>
+                                <label htmlFor="Nonbinary" style={{ fontSize: "0.9em" }}>Nonbinary</label>
                             </li>
                         </ul>
                     </div>
