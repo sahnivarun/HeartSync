@@ -10,7 +10,59 @@ from rank_bm25 import BM25Okapi
 import nltk
 import string
 import numpy as np
+import json
 
+
+
+#FILTER########################################################################################################################
+
+def filter_users(target_age_min=None, target_age_max=None, target_sex=None, target_status=None,
+                 target_orientation=None, target_drinks=None, target_drugs=None, target_ethnicity=None,
+                 target_height=None, target_income=None, target_offspring=None, target_pets=None,
+                 target_religion=None, target_smokes=None):
+
+    # Connect to SQLite database
+    conn = sqlite3.connect('users.db')
+    query = "SELECT * FROM users LIMIT 500"
+    df = pd.read_sql_query(query, conn)
+    conn.close()
+
+    print(df.head())
+
+    # Applying filters dynamically
+    if target_age_min is not None:
+        df = df[df['age'] >= target_age_min]
+    if target_age_max is not None:
+        df = df[df['age'] <= target_age_max]
+    if target_sex is not None:
+        df = df[df['sex'].isin(target_sex)]
+    if target_status is not None:
+        df = df[df['status'].isin(target_status)]
+    if target_orientation is not None:
+        df = df[df['orientation'].isin(target_orientation)]
+    if target_drinks is not None:
+        df = df[df['drinks'].isin(target_drinks)]
+    if target_drugs is not None:
+        df = df[df['drugs'].isin(target_drugs)]
+    if target_ethnicity is not None:
+        df = df[df['ethnicity'].isin(target_ethnicity)]
+    if target_height is not None:
+        df = df[df['height'] > target_height]
+    if target_income is not None:
+        df = df[df['income'] >= target_income]
+    if target_offspring is not None:
+        df = df[df['offspring'].isin(target_offspring)]
+    if target_pets is not None:
+        df = df[df['pets'].isin(target_pets)]
+    if target_religion is not None:
+        df = df[df['religion'].isin(target_religion)]
+    if target_smokes is not None:
+        df = df[df['smokes'].isin(target_smokes)]
+
+    return df
+
+
+#FILTER########################################################################################################################
 
 # DB PROCESSING BM25
 # ------------------------------------------------------------------------------------------------------------------------
@@ -191,7 +243,9 @@ def ask_assistant():
 def update_weights():
     # Receive weights from the frontend
     data = request.json
+    print(data)
     weights = data.get('weights')
+    current_user = data.get('current_user')
     if not weights:
         return jsonify({'error': 'Missing weights'}), 400
 
@@ -199,18 +253,51 @@ def update_weights():
     feature_weights = {key: float(value) for key, value in weights.items()}
 
     # Call your recommendation calculation function
-    recommendations = calculate_recommendations(feature_weights)
+    recommendations = calculate_recommendations(feature_weights,current_user)
 
     # Return JSON response
     return jsonify({'recommendations': recommendations})
 
-def calculate_recommendations(feature_weight):
+def calculate_recommendations(feature_weight,current_user):
 
     # Connect to SQLite database
     conn = sqlite3.connect('users.db')
-    query = "SELECT body_type, ethnicity, job, location, religion, sign, speaks, essay0, essay1, essay2, essay3, essay4, essay5, essay6, essay7, essay8, essay9 FROM users LIMIT 500"
-    df = pd.read_sql_query(query, conn)
+
+    #FILTER DATA HERE
+
+    query = "SELECT * FROM users WHERE username = ?"
+
+    print(query)   
+
+    df = pd.read_sql_query(query, conn, params=(current_user,))
+
+    print("print df tar = " ,  df['target_age_min'].values[0] )
+
+    filtered_df = filter_users(
+        target_age_min=df['target_age_min'].values[0],
+        target_age_max=df['target_age_max'].values[0],
+        target_sex=df['target_sex'].values[0]
+        #target_status=['Single']
+        #target_orientation=df['target_orientation']
+        #target_drinks=['not-at-all'],
+        #target_drugs=['never'],
+        #target_ethnicity=['American', 'Asian'],
+        #target_height=150,  # Assuming height is in cm
+        #target_offspring=['Wants kids'],
+        #target_pets=['Likes dogs'],
+        #target_religion=['Agnostic', 'Atheist','Jewish','Sikh','Catholic'],
+        #target_smokes=['']
+    )
+
+    df = filtered_df
+
+    print(df)
+
+    #query = "SELECT body_type, ethnicity, job, location, religion, sign, speaks, essay0, essay1, essay2, essay3, essay4, essay5, essay6, essay7, essay8, essay9 FROM users LIMIT 500"
+    #df = pd.read_sql_query(query, conn)
     conn.close()
+
+
 
     # Preprocess essays by concatenating them and then preprocessing
     df['essays_concatenated'] = df[['essay0', 'essay1', 'essay2', 'essay3', 'essay4', 'essay5', 'essay6', 'essay7', 'essay8', 'essay9']].fillna('').agg(' '.join, axis=1)
@@ -291,6 +378,7 @@ def get_conversations():
 
     # Return the list of users as a JSON response
     return jsonify({"conversations_with": user_list})
+
 
 
 @app.route('/messages', methods=['GET'])

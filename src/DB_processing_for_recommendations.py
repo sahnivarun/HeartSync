@@ -9,6 +9,59 @@ import numpy as np
 nltk.download('punkt')
 nltk.download('stopwords')
 
+
+#FILTER#
+import pandas as pd
+import sqlite3
+
+def filter_users(target_age_min=None, target_age_max=None, target_sex=None, target_status=None,
+                 target_orientation=None, target_drinks=None, target_drugs=None, target_ethnicity=None,
+                 target_height=None, target_income=None, target_offspring=None, target_pets=None,
+                 target_religion=None, target_smokes=None):
+
+    # Connect to SQLite database
+    conn = sqlite3.connect('users.db')
+    query = "SELECT * FROM users LIMIT 500"
+    df = pd.read_sql_query(query, conn)
+    conn.close()
+
+    print(df.head())
+
+    # Applying filters dynamically
+    if target_age_min is not None:
+        df = df[df['age'] >= target_age_min]
+    if target_age_max is not None:
+        df = df[df['age'] <= target_age_max]
+    if target_sex is not None:
+        df = df[df['sex'].isin(target_sex)]
+    if target_status is not None:
+        df = df[df['status'].isin(target_status)]
+    if target_orientation is not None:
+        df = df[df['orientation'].isin(target_orientation)]
+    if target_drinks is not None:
+        df = df[df['drinks'].isin(target_drinks)]
+    if target_drugs is not None:
+        df = df[df['drugs'].isin(target_drugs)]
+    if target_ethnicity is not None:
+        df = df[df['ethnicity'].isin(target_ethnicity)]
+    if target_height is not None:
+        df = df[df['height'] > target_height]
+    if target_income is not None:
+        df = df[df['income'] >= target_income]
+    if target_offspring is not None:
+        df = df[df['offspring'].isin(target_offspring)]
+    if target_pets is not None:
+        df = df[df['pets'].isin(target_pets)]
+    if target_religion is not None:
+        df = df[df['religion'].isin(target_religion)]
+    if target_smokes is not None:
+        df = df[df['smokes'].isin(target_smokes)]
+
+    return df
+
+
+#FILTER#
+
 # Define weights for each feature
 feature_weights = {
     'ethnicity': 0,
@@ -102,9 +155,33 @@ def scale_and_sort_combined_features(combined_features, min_val=0, max_val=5):
 
 # Connect to SQLite database
 conn = sqlite3.connect('users.db')
-query = "SELECT body_type, ethnicity, job, location, religion, sign, speaks, essay0, essay1, essay2, essay3, essay4, essay5, essay6, essay7, essay8, essay9 FROM users LIMIT 100"
+query = "SELECT * FROM users LIMIT 500"
 df = pd.read_sql_query(query, conn)
 conn.close()
+
+
+#FILTER
+filtered_df = filter_users(
+    #target_age_min=20,
+    #target_age_max=50,
+    #target_sex=['Female']
+    #target_status=['Single']
+    #target_orientation=['Straight'],
+    #target_drinks=['not-at-all'],
+    #target_drugs=['never'],
+    target_ethnicity=['American', 'Asian'],
+    #target_height=150,  # Assuming height is in cm
+    target_offspring=['Wants kids'],
+    #target_pets=['Likes dogs'],
+    target_religion=['Agnostic', 'Atheist','Jewish','Sikh','Catholic'],
+    #target_smokes=['']
+)
+print('FILTERED DF')
+print(filtered_df)
+age_counts = filtered_df['ethnicity'].value_counts()
+print(age_counts)
+#FILTER
+input()
 
 # Preprocess essays by concatenating them and then preprocessing
 df['essays_concatenated'] = df[['essay0', 'essay1', 'essay2', 'essay3', 'essay4', 'essay5', 'essay6', 'essay7', 'essay8', 'essay9']].fillna('').agg(' '.join, axis=1)

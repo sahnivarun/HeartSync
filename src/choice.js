@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // Import Link for navigation
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function Choice() {
+  const location = useLocation();
   const [viewMode, setViewMode] = useState('');
   const [recommendations, setRecommendations] = useState([]);
+  const current_username = location.state.username;
 
   const centeredStyle = {
     display: 'flex',
@@ -39,7 +42,7 @@ function Choice() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({weights: weights})
+        body: JSON.stringify({weights: weights ,current_user: current_username} )
     })
     .then(response => response.json())
     .then(data => {
@@ -53,7 +56,7 @@ function Choice() {
 
   return (
     <div className="Choice" style={centeredStyle}>
-        <h1>What kind of profiles do you want to see?</h1>
+        <h1>What kind of profiles do you want to see {current_username}?</h1>
         <button onClick={() => setViewMode('similar')}>I want to see similar profiles</button>
         <button onClick={() => setViewMode('explore')}>I'm open to explore</button>
 
