@@ -1,0 +1,19 @@
+.join-container {
+    background-color: #fff; /* or any color of your choice */
+    border: 1px solid #ccc; /* just an example of border, can be customized */
+    border-radius: 8px; /* optional, for rounded corners */
+    padding: 20px; /* spacing inside the box */
+    max-height: 500px; /* maximum height of the box */
+    overflow-y: auto; /* makes vertical scrollbar appear if content overflows */
+    margin: auto; /* centers the box on the page */
+    width: 80%; /* or any width you prefer */
+  }
+  
+  @keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }

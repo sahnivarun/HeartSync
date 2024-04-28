@@ -13,12 +13,12 @@ nltk.download('stopwords')
 feature_weights = {
     'ethnicity': 0,
     'job': 0,
-    'body_type': 1,
-    'location': 0,
-    'religion': 0,
-    'sign': 0,
-    'speaks': 0,
-    'essays_concatenated': 0
+    'body_type': 5,
+    'location': 1,
+    'religion': 3,
+    'sign': 3,
+    'speaks': 4,
+    'essays_concatenated': 3
 }
 
 # Function to preprocess text
@@ -165,6 +165,7 @@ sorted_combined_features_with_indices = scale_and_sort_combined_features(combine
 print(sorted_combined_features_with_indices[0])
 
 top_indices = [idx for score, idx in sorted_combined_features_with_indices[0] if idx != 0][:10]
+
 
 
 def get_user_profiles(indices):

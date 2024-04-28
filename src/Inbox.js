@@ -3,85 +3,177 @@ import axios from 'axios';
 import { format, parseISO } from 'date-fns';  // Import format and parseISO functions
 import Chat from './Chat'; // Import Chat component
 
+
 function Inbox() {
-    const currentUser = "15";
+
+/////////////////////TESTING CURRENT USER
+
+const [currentUser, setCurrentUser] = useState('');
+const [isUserSet, setIsUserSet] = useState(false);
+
+const handleNameSubmit = (event) => {
+    event.preventDefault();
+    const name = event.target.name.value; // Assuming your input's name attribute is 'name'
+    setCurrentUser(name);
+    setIsUserSet(true);
+};
+
+
+
+    //const currentUser = "Pavitra";
     const [users, setUsers] = useState([]);
     const [messages, setMessages] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);  // Track the selected user for chatting
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/conversations?username=${currentUser}`)
-            .then(response => {
-                setUsers(response.data.conversations_with);
-            })
-            .catch(error => {
-                console.error('Error fetching data: ', error);
-            });
-    }, []);
+        const fetchUsers = () => {
+            axios.get(`http://localhost:5000/conversations?username=${currentUser}`)
+                .then(response => {
+                    setUsers(response.data.conversations_with);
+                })
+                .catch(error => {
+                    console.error('Error fetching data: ', error);
+                });
+        };
+        fetchUsers();
+        const interval = setInterval(fetchUsers, 200);
 
-    const inboxStyle = {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh'
-    };
+        return () => clearInterval(interval);
+    }, [currentUser]);
 
-    const boxStyle = {
-        width: '1000px',
-        height: '800px',
-        border: '2px solid black',
-        display: 'flex'
-    };
+    useEffect(() => {
+        if (selectedUser) {
+            const fetchMessages = () => {
+                axios.get(`http://localhost:5000/messages?User1=${currentUser}&User2=${selectedUser}`)
+                    .then(response => {
+                        setMessages(response.data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching messages: ', error);
+                    });
+            };
 
-    const userListStyle = {
-        flex: 1,
-        borderRight: '2px solid black',
-        padding: '10px'
-    };
+            fetchMessages();
+            const interval = setInterval(fetchMessages, 200);
 
-    const messageAreaStyle = {
-        flex: 4,
-        padding: '10px'
+            return () => clearInterval(interval);
+        }
+    }, [selectedUser, currentUser]);
+
+    const styles = {
+        inboxStyle: {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh',
+            background: '#f7f7f7', // light grey background
+            width: '200%'
+        },
+        boxStyle: {
+            width: '200%', // increased from 70% to 80% to make the box wider
+            maxWidth: '1200px', // increased from 1000px to 1200px
+            height: '80vh', // responsive height
+            border: '1px solid #ccc', // lighter border
+            display: 'flex',
+            boxShadow: '0 4px 8px rgba(0,0,0,0.1)', // subtle shadow
+            borderRadius: '8px', // rounded corners
+            overflow: 'hidden', // ensures nothing overflows
+        },
+        userListStyle: {
+            flex: 1,
+            borderRight: '1px solid #ddd',
+            padding: '10px',
+            background: '#ffffff', // white background for clarity
+            overflowY: 'auto', // allows scrolling
+        },
+        messageAreaStyle: {
+            flex: 3,
+            padding: '10px',
+            overflowY: 'auto', // allows scrolling
+        },
+        userDivStyle: {
+            padding: '10px',
+            border: '1px solid #eee',
+            marginBottom: '5px',
+            cursor: 'pointer',
+            borderRadius: '4px', // rounded corners for user divs
+            backgroundColor: '#f0f0f0', // slightly off-white for contrast
+            transition: 'background-color 0.3s', // smooth transition for hover effect
+            ':hover': {
+                backgroundColor: '#e2e2e2' // change color on hover
+            }
+        },
+        messageDivStyle: {
+            marginBottom: '10px',
+            padding: '10px',
+            backgroundColor: '#ffffff', // messages on a white background
+            borderRadius: '4px', // rounded corners for messages
+            boxShadow: '0 2px 4px rgba(0,0,0,0.05)', // subtle shadow for messages
+        }
     };
 
     const handleUserClick = (otherUser) => {
-        console.log(`Fetching messages between User1: ${currentUser} and User2: ${otherUser}`);
-        setSelectedUser(otherUser);  // Set the currently selected user
-        axios.get(`http://localhost:5000/messages?User1=${currentUser}&User2=${otherUser}`)
-            .then(response => {
-                setMessages(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching messages: ', error);
-            });
+        setSelectedUser(otherUser);
     };
 
-    return (
-        <div style={inboxStyle}>
+/*    return (
+        <div style={styles.inboxStyle}>
             <h1>Conversations</h1>
-            <div style={boxStyle}>
-                <div style={userListStyle}>
+            <div style={styles.boxStyle}>
+                <div style={styles.userListStyle}>
                     <h2>Your Matches</h2>
                     {users.map((user, index) => (
-                        <div key={index} style={{ padding: '10px', border: '1px solid grey', marginBottom: '5px', cursor: 'pointer' }}
-                             onClick={() => handleUserClick(user)}>
+                        <div key={index} style={styles.userDivStyle} onClick={() => handleUserClick(user)}>
                             {user}
                         </div>
                     ))}
                 </div>
-                <div style={messageAreaStyle}>
+                <div style={styles.messageAreaStyle}>
                     {messages.map((msg, index) => (
-                        <div key={index} style={{ marginBottom: '10px' }}>
+                        <div key={index} style={styles.messageDivStyle}>
                             ({format(parseISO(msg.timestamp), 'dd MMMM p')}) {msg.sender}: {msg.message}
                         </div>
                     ))}
-                    {/* Include the Chat component */}
                     {selectedUser && <Chat otherUser={selectedUser} current={currentUser} initialMessages={messages} />}
                 </div>
             </div>
         </div>
-    );
+    );*/ //WORKING CODE
+
+    return (
+        <div style={styles.inboxStyle}>
+            {!isUserSet ? (
+                <form onSubmit={handleNameSubmit}>
+                    <label htmlFor="name">Enter your name:</label>
+                    <input id="name" type="text" required />
+                    <button type="submit">Set Name</button>
+                </form>
+            ) : (
+                <>
+                    <h1>Conversations</h1>
+                    <div style={styles.boxStyle}>
+                        <div style={styles.userListStyle}>
+                            <h2>Your Matches</h2>
+                            {users.map((user, index) => (
+                                <div key={index} style={styles.userDivStyle} onClick={() => handleUserClick(user)}>
+                                    {user}
+                                </div>
+                            ))}
+                        </div>
+                        <div style={styles.messageAreaStyle}>
+                            {messages.map((msg, index) => (
+                                <div key={index} style={styles.messageDivStyle}>
+                                    ({format(parseISO(msg.timestamp), 'dd MMMM p')}) {msg.sender}: {msg.message}
+                                </div>
+                            ))}
+                            {selectedUser && <Chat otherUser={selectedUser} current={currentUser} initialMessages={messages} />}
+                        </div>
+                    </div>
+                </>
+            )}
+        </div>
+    );    
 }
 
 export default Inbox;

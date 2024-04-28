@@ -54,15 +54,12 @@ function Chat({ otherUser, current, initialMessages }) {
         e.preventDefault();
         if (!userInput.trim()) return;
     
-        const message = { 
-            name: current, 
-            content: userInput, 
+        const message = {
+            name: current,
+            content: userInput,
             timestamp: new Date().toISOString(),
             receiver: otherUser // Assuming 'otherUser' is the receiver
         };
-        message.timestampFormatted = format(parseISO(message.timestamp), 'd MMMM p');
-    
-        setMessages((prevMessages) => [...prevMessages, message]);
     
         // Emit the message to the server to be broadcasted to other users
         socket.emit('message', { name: userName, content: userInput, timestamp: message.timestamp });
@@ -91,14 +88,47 @@ function Chat({ otherUser, current, initialMessages }) {
         // Clear the user input after sending the message
         setUserInput('');
     };
+    
+
+
 
     const askAssistant = () => {
-        fetch('http://localhost:5000/ask-assistant', {
-            method: 'POST',
+        // First fetch the latest messages
+        fetch(`http://localhost:5000/messages?User1=${current}&User2=${otherUser}`, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ conversation: formattedConversation }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Update messages state with the latest fetched messages
+            const updatedMessages = data.map(msg => ({
+                ...msg,
+                name: msg.sender,
+                timestampFormatted: format(parseISO(msg.timestamp), 'd MMMM p')
+            }));
+            setMessages(updatedMessages);
+    
+            // Prepare the payload for asking the assistant
+            const payload = {
+                currentUser: current,
+                conversation: updatedMessages.map(msg => ({
+                    name: msg.name,
+                    message: msg.message,
+                    timestamp: msg.timestamp,
+                    sender: msg.sender
+                })),
+            };
+    
+            // Now send the updated conversation to the assistant
+            return fetch('http://localhost:5000/ask-assistant', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
         })
         .then(response => response.json())
         .then(data => {
@@ -110,21 +140,36 @@ function Chat({ otherUser, current, initialMessages }) {
     };
 
     const handleSuggestionClick = (suggestion) => {
-        setUserInput(suggestion);
+        // Strip any leading numbers followed by a dot and space (e.g., '1. ') and also remove the double quotes
+        const cleanSuggestion = suggestion.replace(/^\d+\.\s+/, '').replace(/^"(.+(?="$))"$/, '$1');
+        setUserInput(cleanSuggestion);
         setSuggestions([]);
     };
 
+    const styles = {
+        inputStyle: {
+            width: '100%',  // Makes the input box take the full width of its container
+            height: '50px',  // Sets a fixed height
+            padding: '10px',  // Adds space inside the box around the text
+            fontSize: '16px',  // Sets the size of the text
+            boxSizing: 'border-box',  // Includes padding and border in the width and height
+            borderRadius: '5px',  // Rounds the corners of the input box
+            border: '1px solid #ccc',  // Adds a subtle border
+            marginBottom: '10px',  // Adds space below the input box
+        }
+    };
+    
     return (
         <div>
             <ul style={{ listStyleType: 'none', padding: 0 }}>
-            {messages.map((msg, index) => (
-                msg.content ? (
-                    <li key={index}>
-                        <span>({msg.timestampFormatted})</span>
-                        <b> {msg.name}: </b> {msg.content}
-                    </li>
-                ) : null
-            ))}
+                {messages.map((msg, index) => (
+                    msg.content ? (
+                        <li key={index}>
+                            <span>({msg.timestampFormatted})</span>
+                            <b> {msg.name}: </b> {msg.content}
+                        </li>
+                    ) : null
+                ))}
             </ul>
             <form onSubmit={sendMessage}>
                 <input
@@ -132,6 +177,7 @@ function Chat({ otherUser, current, initialMessages }) {
                     value={userInput}
                     onChange={(e) => setUserInput(e.target.value)}
                     placeholder="Type a message..."
+                    style={styles.inputStyle}  // Applying the custom styles
                 />
                 <button type="submit">Send</button>
             </form>
