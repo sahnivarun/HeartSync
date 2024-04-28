@@ -56,16 +56,6 @@ function JoinScreen() {
         });
     };
 
-    // const handlePetsChange = (value) => {
-    //     // Check if the value is already selected
-    //     if (pets.includes(value)) {
-    //         // If selected, remove it from the list
-    //         setPets(pets.filter(pet => pet !== value));
-    //     } else {
-    //         // If not selected, add it to the list
-    //         setPets([...pets, value]);
-    //     }
-    // };
     const handlePetsChange = (value) => {
         // Create a new array to hold the updated pets
         let updatedPets = [];
@@ -214,7 +204,7 @@ function JoinScreen() {
 
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <div className="field" style={{ display: "flex", alignItems: "center" }}>
-                        <label htmlFor="sex" style={{ marginRight: "10px" }}>Sex<span>*</span>:</label>
+                        <label htmlFor="sex" style={{ marginRight: "10px" }}>Gender<span>*</span>:</label>
                         <ul className="options" style={{ display: "flex", listStyle: "none", padding: 0 }}>
                             <li style={{ marginRight: "10px" }}>
                                 <input type="radio" id="male" name="sex" value="male" onChange={(e) => setSex(e.target.value)} required />
