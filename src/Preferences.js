@@ -34,7 +34,8 @@ function Preferences() {
                 if (success) {
                     setTargetAgeMin(user.target_age_min || '');
                     setTargetAgeMax(user.target_age_max || '');
-                    setTargetSex(JSON.parse(user.target_sex || '[]'));
+                    // setTargetSex(JSON.parse(user.target_sex || ''));
+                    setTargetSex(user.target_sex || ''); // Updated line
                     setTargetStatus(JSON.parse(user.target_status || '[]'));
                     setTargetOrientation(JSON.parse(user.target_orientation || '[]'));
                     setTargetDrinks(JSON.parse(user.target_drinks || '[]'));
@@ -198,25 +199,67 @@ function Preferences() {
             <h1>Who are you looking for, {username}?</h1>
             <form onSubmit={handleSubmit}>
 
+                {/*<div style={{ display: "flex", justifyContent: "center" }}>*/}
+                {/*    <div className="field" style={{ display: "flex", alignItems: "center" }}>*/}
+                {/*        <label htmlFor="target_sex" style={{ marginRight: "10px" }}>Sex<span>*</span>:</label>*/}
+                {/*        <ul className="options" style={{ display: "flex", listStyle: "none", padding: 0 }}>*/}
+                {/*            <li style={{ marginRight: "10px" }}>*/}
+                {/*                <input type="checkbox" id="male" name="target_sex" value="male" onChange={(e) => setTargetSex(e.target.value)} />*/}
+                {/*                <label htmlFor="male" style={{ fontSize: "0.9em" }}>Male</label>*/}
+                {/*            </li>*/}
+                {/*            <li style={{ marginRight: "10px" }}>*/}
+                {/*                <input type="checkbox" id="female" name="target_sex" value="female" onChange={(e) => setTargetSex(e.target.value)} />*/}
+                {/*                <label htmlFor="female" style={{ fontSize: "0.9em" }}>Female</label>*/}
+                {/*            </li>*/}
+                {/*            <li>*/}
+                {/*                <input type="checkbox" id="nonbinary" name="target_sex" value="nonbinary" onChange={(e) => setTargetSex(e.target.value)} />*/}
+                {/*                <label htmlFor="nonbinary" style={{ fontSize: "0.9em" }}>Nonbinary</label>*/}
+                {/*            </li>*/}
+                {/*        </ul>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <div className="field" style={{ display: "flex", alignItems: "center" }}>
                         <label htmlFor="target_sex" style={{ marginRight: "10px" }}>Sex<span>*</span>:</label>
                         <ul className="options" style={{ display: "flex", listStyle: "none", padding: 0 }}>
                             <li style={{ marginRight: "10px" }}>
-                                <input type="checkbox" id="male" name="target_sex" value="male" onChange={(e) => setTargetSex(e.target.value)} />
+                                <input
+                                    type="checkbox"
+                                    id="male"
+                                    name="target_sex"
+                                    value="male"
+                                    checked={target_sex === 'male'} // Ensure checkbox reflects the state correctly
+                                    onChange={(e) => setTargetSex(e.target.value)} // Update state based on checkbox change
+                                />
                                 <label htmlFor="male" style={{ fontSize: "0.9em" }}>Male</label>
                             </li>
                             <li style={{ marginRight: "10px" }}>
-                                <input type="checkbox" id="female" name="target_sex" value="female" onChange={(e) => setTargetSex(e.target.value)} />
+                                <input
+                                    type="checkbox"
+                                    id="female"
+                                    name="target_sex"
+                                    value="female"
+                                    checked={target_sex === 'female'} // Ensure checkbox reflects the state correctly
+                                    onChange={(e) => setTargetSex(e.target.value)} // Update state based on checkbox change
+                                />
                                 <label htmlFor="female" style={{ fontSize: "0.9em" }}>Female</label>
                             </li>
                             <li>
-                                <input type="checkbox" id="nonbinary" name="target_sex" value="nonbinary" onChange={(e) => setTargetSex(e.target.value)} />
+                                <input
+                                    type="checkbox"
+                                    id="nonbinary"
+                                    name="target_sex"
+                                    value="nonbinary"
+                                    checked={target_sex === 'nonbinary'} // Ensure checkbox reflects the state correctly
+                                    onChange={(e) => setTargetSex(e.target.value)} // Update state based on checkbox change
+                                />
                                 <label htmlFor="nonbinary" style={{ fontSize: "0.9em" }}>Nonbinary</label>
                             </li>
                         </ul>
                     </div>
                 </div>
+
 
                 <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                     <div className="field" style={{ display: "flex", alignItems: "center" }}>
