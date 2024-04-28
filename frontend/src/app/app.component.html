@@ -1,0 +1,21 @@
+<div class="feedback-container">
+  <h1 class="feedback-title">Feedback Form</h1>
+  <form (submit)="submitFeedback()" class="feedback-form">
+    <div class="input-group">
+      <label for="question1">Openness (1-5)</label>
+      <input type="number" id="question1" [(ngModel)]="feedback.question1" name="question1" min="1" max="5" required placeholder="1 to 5">
+    </div>
+    
+    <div class="input-group">
+      <label for="question2">Communication Clarity (1-5)</label>
+      <input type="number" id="question2" [(ngModel)]="feedback.question2" name="question2" min="1" max="5" required placeholder="1 to 5">
+    </div>
+
+    <div class="input-group">
+      <label for="question3">Empathy (1-5)</label>
+      <input type="number" id="question3" [(ngModel)]="feedback.question3" name="question3" min="1" max="5" required placeholder="1 to 5">
+    </div>
+
+    <button type="submit" class="submit-button">Submit Feedback</button>
+  </form>
+</div>
