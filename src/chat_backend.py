@@ -359,11 +359,11 @@ def calculate_recommendations(feature_weight,current_user):
     print('drinks  = ',target_variables['target_drinks'])      
 
     filtered_df = filter_users(
-        target_age_min=target_variables['target_age_min'],
-        target_age_max=target_variables['target_age_max'],
-        target_sex=target_variables['target_sex'],
-        target_status=target_variables['target_status'],
-        target_orientation=target_variables['target_orientation']
+        #target_age_min=target_variables['target_age_min'],
+        #target_age_max=target_variables['target_age_max'],
+        #target_sex=target_variables['target_sex'],
+        #target_status=target_variables['target_status'],
+        #target_orientation=target_variables['target_orientation']
         #target_drinks=target_variables['target_drinks']
         #target_drugs=target_variables['target_drugs']
         #target_ethnicity=target_variables['target_ethnicity']
@@ -452,20 +452,35 @@ def calculate_recommendations(feature_weight,current_user):
 
     
 
+    print('error = ',top_user_profiles['sex'].values)
+
     # Apply filters dynamically for list-based conditions
-    if target_variables['target_sex'] is not None:
-        top_user_profiles = top_user_profiles[top_user_profiles['sex'].isin([target_variables['target_sex']])]  # Wraps the string in a list
+    # if target_variables['target_sex'] is not None:
+    #     top_user_profiles = top_user_profiles[top_user_profiles['sex'].iloc.isin([target_variables['target_sex']])]  # Wraps the string in a list
+
+
+    if target_variables['target_sex']:
+        target_sex_list = target_variables['target_sex'].split()  
+
+        top_user_profiles = top_user_profiles[top_user_profiles['sex'].isin(target_sex_list)]    
 
     if target_variables['target_status'] is not None:
-        top_user_profiles = top_user_profiles[top_user_profiles['status'].isin([target_variables['target_status']])]
-    
+        # Split the target_status into a list if it's a non-empty string
+        target_status_list = target_variables['target_status'].split()  # Assuming space-separated values
+        # Filter the DataFrame
+        top_user_profiles = top_user_profiles[top_user_profiles['status'].isin(target_status_list)]
+
 
     if target_variables['target_orientation'] is not None:
-        top_user_profiles = top_user_profiles[top_user_profiles['orientation'].isin([target_variables['target_orientation']])]
+        # Split the target_orientation into a list if it's a non-empty string
+        target_orientation_list = target_variables['target_orientation'].split()  # Assuming space-separated values
+        # Filter the DataFrame
+        top_user_profiles = top_user_profiles[top_user_profiles['orientation'].isin(target_orientation_list)]
 
 
 
-    print('top = ',top_user_profiles['rowid'].values)
+
+    print('target sex = ',target_variables['target_sex'])
 
     top_indices = top_user_profiles['rowid'].values
 
