@@ -262,7 +262,7 @@ def ask_assistant():
 
     # Adjust the prompt to ask for suggestions specifically for the current user
     conversation_text = "\n".join([f"{msg.get('name', '')}: {msg.get('message', '')}" for msg in current_conversation])
-    prompt = f"I am {current_user} and I am talking to {otherUser}. This is {otherUser}'s profile {user_profile}. Based on {otherUser}'s profile and following latest conversation:\n{conversation_text}\n give me 5 suggestions for my next message"
+    prompt = f"I am {current_user} and I am talking to {otherUser}. This is {otherUser}'s profile {user_profile}. Based on {otherUser}'s profile and following latest conversation:\n{conversation_text}\n give me 5 suggestions for my next message based on our latest conversation and {otherUser}'s whole profile"
 
     print(prompt)
 
@@ -683,7 +683,7 @@ def join():
     image_binary = base64.b64decode(image_data)
 
     # Save the image locally with the username as the filename
-    image_path = os.path.join('C:\\Users\\Varun Sahni\\Documents\\heart-sync-app\\images', f"{username}.png")
+    image_path = os.path.join('C:\\Users\\pavit\\Desktop\\react-chat-app\\images', f"{username}.png")
     with open(image_path, 'wb') as f:
         f.write(image_binary)
 

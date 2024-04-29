@@ -40,7 +40,7 @@ const handleNameSubmit = (event) => {
                 });
         };
         fetchUsers();
-        const interval = setInterval(fetchUsers, 200);
+        const interval = setInterval(fetchUsers, 1000);
 
         return () => clearInterval(interval);
     }, [currentUser]);
@@ -58,7 +58,7 @@ const handleNameSubmit = (event) => {
             };
 
             fetchMessages();
-            const interval = setInterval(fetchMessages, 200);
+            const interval = setInterval(fetchMessages, 1000);
 
             return () => clearInterval(interval);
         }

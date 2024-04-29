@@ -160,7 +160,7 @@ function JoinScreen() {
             <h1>Join HeartSync</h1>
             <form onSubmit={handleJoin}>
                 <div>
-                    <label htmlFor="username">Username<span style={{ color: 'white' }}>*</span>:</label>
+                    <label htmlFor="username">Username<span style={{ color: 'black' }}>*</span>:</label>
                     <input
                         type="text"
                         id="username"
@@ -173,7 +173,7 @@ function JoinScreen() {
                 <div style={{ marginBottom: '20px' }}></div>
 
                 <div>
-                    <label htmlFor="password">Password<span style={{ color: 'white' }}>*</span>:</label>
+                    <label htmlFor="password">Password<span style={{ color: 'black' }}>*</span>:</label>
                     <input
                         type="password"
                         id="password"
@@ -186,7 +186,7 @@ function JoinScreen() {
                 <div style={{ marginBottom: '20px' }}></div>
 
                 <div>
-                    <label htmlFor="name">Name<span style={{ color: 'white' }}>*</span>:</label>
+                    <label htmlFor="name">Name<span style={{ color: 'black' }}>*</span>:</label>
                     <input
                         type="text"
                         id="name"
@@ -199,8 +199,8 @@ function JoinScreen() {
                 <div style={{ marginBottom: '20px' }}></div>
 
                 <div>
-                    <label htmlFor="image">Image:</label>
-                    <input type="file" id="image" accept="image/*" onChange={handleImageUpload} />
+                    <label htmlFor="image">Image:*</label>
+                    <input required type="file" id="image" accept="image/*" onChange={handleImageUpload} />
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "center" }}>
