@@ -71,18 +71,20 @@ function Preferences() {
     };
 
     const handleOrientationChange = (value) => {
-        // Toggle the value in the target_orientation state variable
-        setTargetOrientation((prevOrientation) => {
-            // Check if the value is already present in the state
-            if (prevOrientation.includes(value)) {
-                // Remove the value from the state if it exists
-                return prevOrientation.filter((item) => item !== value);
+        setTargetOrientation(prevOrientation => {
+            const currentIndex = prevOrientation.indexOf(value);
+            const newOrientation = [...prevOrientation];
+    
+            if (currentIndex === -1) {
+                newOrientation.push(value); // value not in array, add it
             } else {
-                // Add the value to the state if it doesn't exist
-                return [...prevOrientation, value];
+                newOrientation.splice(currentIndex, 1); // value in array, remove it
             }
+    
+            return newOrientation;
         });
     };
+    
 
     const handleStatusChange = (value) => {
         setTargetStatus((prevStatus) => {
@@ -288,6 +290,7 @@ function Preferences() {
                                     type="checkbox"
                                     id="Straight"
                                     value="Straight"
+                                    checked={target_orientation.includes('Straight')}
                                     onChange={(e) => handleOrientationChange(e.target.value)}
                                 />
                                 <label htmlFor="Straight" style={{ fontSize: "0.9em" }}>Straight</label>
@@ -297,6 +300,7 @@ function Preferences() {
                                     type="checkbox"
                                     id="Gay"
                                     value="Gay"
+                                    checked={target_orientation.includes('Gay')}
                                     onChange={(e) => handleOrientationChange(e.target.value)}
                                 />
                                 <label htmlFor="Gay" style={{ fontSize: "0.9em" }}>Gay</label>
@@ -306,6 +310,7 @@ function Preferences() {
                                     type="checkbox"
                                     id="Bisexual"
                                     value="Bisexual"
+                                    checked={target_orientation.includes('Bisexual')}
                                     onChange={(e) => handleOrientationChange(e.target.value)}
                                 />
                                 <label htmlFor="Bisexual" style={{ fontSize: "0.9em" }}>Bisexual</label>
@@ -315,6 +320,7 @@ function Preferences() {
                                     type="checkbox"
                                     id="Lesbian"
                                     value="Lesbian"
+                                    checked={target_orientation.includes('Lesbian')}
                                     onChange={(e) => handleOrientationChange(e.target.value)}
                                 />
                                 <label htmlFor="Lesbian" style={{ fontSize: "0.9em" }}>Lesbian</label>
@@ -324,6 +330,7 @@ function Preferences() {
                                     type="checkbox"
                                     id="Asexual"
                                     value="Asexual"
+                                    checked={target_orientation.includes('Asexual')}
                                     onChange={(e) => handleOrientationChange(e.target.value)}
                                 />
                                 <label htmlFor="Asexual" style={{ fontSize: "0.9em" }}>Asexual</label>
@@ -341,6 +348,7 @@ function Preferences() {
                                     type="checkbox"
                                     id="Single"
                                     value="Single"
+                                    checked={target_status.includes('Single')}
                                     onChange={(e) => handleStatusChange(e.target.value)}
                                 />
                                 <label htmlFor="Single" style={{ fontSize: "0.9em" }}>Single</label>
@@ -350,6 +358,7 @@ function Preferences() {
                                     type="checkbox"
                                     id="Seeing Someone"
                                     value="Seeing Someone"
+                                    checked={target_status.includes('Seeing Someone')}
                                     onChange={(e) => handleStatusChange(e.target.value)}
                                 />
                                 <label htmlFor="Seeing Someone" style={{ fontSize: "0.9em" }}>Seeing Someone</label>
@@ -366,6 +375,7 @@ function Preferences() {
                                 type="checkbox"
                                 id="Socially"
                                 value="Socially"
+                                checked={target_drinks.includes('Socially')}
                                 onChange={(e) => handleDrinksChange(e.target.value)}
                             />
                             <label htmlFor="Socially" style={{ fontSize: "0.9em" }}>Socially</label>
@@ -375,6 +385,7 @@ function Preferences() {
                                 type="checkbox"
                                 id="Often"
                                 value="Often"
+                                checked={target_drinks.includes('Often')}
                                 onChange={(e) => handleDrinksChange(e.target.value)}
                             />
                             <label htmlFor="Often" style={{ fontSize: "0.9em" }}>Often</label>
@@ -384,6 +395,7 @@ function Preferences() {
                                 type="checkbox"
                                 id="Not at all"
                                 value="Not at all"
+                                checked={target_drinks.includes('Not at all')}
                                 onChange={(e) => handleDrinksChange(e.target.value)}
                             />
                             <label htmlFor="Not at all" style={{ fontSize: "0.9em" }}>Not at all</label>
@@ -393,6 +405,7 @@ function Preferences() {
                                 type="checkbox"
                                 id="Rarely"
                                 value="Rarely"
+                                checked={target_drinks.includes('Rarely')}
                                 onChange={(e) => handleDrinksChange(e.target.value)}
                             />
                             <label htmlFor="Rarely" style={{ fontSize: "0.9em" }}>Rarely</label>
@@ -408,6 +421,7 @@ function Preferences() {
                                 type="checkbox"
                                 id="Never"
                                 value="Never"
+                                checked={target_drugs.includes('Never')}
                                 onChange={(e) => handleDrugsChange(e.target.value)}
                             />
                             <label htmlFor="Never" style={{ fontSize: "0.9em" }}>Never</label>
@@ -417,6 +431,7 @@ function Preferences() {
                                 type="checkbox"
                                 id="Sometimes"
                                 value="Sometimes"
+                                checked={target_drugs.includes('Sometimes')}
                                 onChange={(e) => handleDrugsChange(e.target.value)}
                             />
                             <label htmlFor="Sometimes" style={{ fontSize: "0.9em" }}>Sometimes</label>
@@ -426,6 +441,7 @@ function Preferences() {
                                 type="checkbox"
                                 id="Often"
                                 value="Often"
+                                checked={target_drugs.includes('Often')}
                                 onChange={(e) => handleDrugsChange(e.target.value)}
                             />
                             <label htmlFor="Often" style={{ fontSize: "0.9em" }}>Often</label>
@@ -441,6 +457,7 @@ function Preferences() {
                                 type="checkbox"
                                 id="Asian"
                                 value="Asian"
+                                checked={target_ethnicity.includes('Asian')}
                                 onChange={(e) => handleEthnicityChange(e.target.value)}
                             />
                             <label htmlFor="Asian" style={{ fontSize: "0.9em" }}>Asian</label>
@@ -450,6 +467,7 @@ function Preferences() {
                                 type="checkbox"
                                 id="American"
                                 value="American"
+                                checked={target_ethnicity.includes('American')}
                                 onChange={(e) => handleEthnicityChange(e.target.value)}
                             />
                             <label htmlFor="American" style={{ fontSize: "0.9em" }}>American</label>
@@ -459,6 +477,7 @@ function Preferences() {
                                 type="checkbox"
                                 id="Hispanic/Latino"
                                 value="Hispanic/Latino"
+                                checked={target_ethnicity.includes('Hispanic/Latino')}
                                 onChange={(e) => handleEthnicityChange(e.target.value)}
                             />
                             <label htmlFor="Hispanic/Latino" style={{ fontSize: "0.9em" }}>Hispanic/Latino</label>
@@ -468,6 +487,7 @@ function Preferences() {
                                 type="checkbox"
                                 id="Black"
                                 value="Black"
+                                checked={target_ethnicity.includes('Black')}
                                 onChange={(e) => handleEthnicityChange(e.target.value)}
                             />
                             <label htmlFor="Black" style={{ fontSize: "0.9em" }}>Black</label>
@@ -477,6 +497,7 @@ function Preferences() {
                                 type="checkbox"
                                 id="White"
                                 value="White"
+                                checked={target_ethnicity.includes('White')}
                                 onChange={(e) => handleEthnicityChange(e.target.value)}
                             />
                             <label htmlFor="White " style={{ fontSize: "0.9em" }}>White</label>
@@ -486,6 +507,7 @@ function Preferences() {
                                 type="checkbox"
                                 id="Other"
                                 value="Other"
+                                checked={target_ethnicity.includes('Other')}
                                 onChange={(e) => handleEthnicityChange(e.target.value)}
                             />
                             <label htmlFor="Other" style={{ fontSize: "0.9em" }}>Other</label>
