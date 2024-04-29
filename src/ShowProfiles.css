@@ -73,7 +73,7 @@
   .actions {
     position: fixed; /* Position fixed within the viewport */
     bottom: 20px; /* Adjust the distance from the bottom as needed */
-    left: 50%; /* Align to the center horizontally */
+    left: 80%; /* Align to the center horizontally */
     transform: translateX(-50%); /* Center horizontally */
     display: flex;
     justify-content: center;
