@@ -4,6 +4,7 @@ import Login from './Login';
 import MainScreen from './MainScreen';
 import JoinScreen from './JoinScreen';
 import Preferences from './Preferences';
+import Profile from './Profile';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import heartLogo from './heart.png';
 
@@ -18,6 +19,7 @@ function App() {
                         <Route path="/login" element={<Login />} />
                         <Route path="/main" element={<MainScreen />} />
                         <Route path="/join" element={<JoinScreen />} />
+                        <Route path="/profile" element={<Profile />} />
                         <Route path="/preferences" element={<Preferences />} />
 
                     </Routes>
