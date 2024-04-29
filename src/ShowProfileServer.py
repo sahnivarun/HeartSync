@@ -6,8 +6,7 @@ from flask import Flask, jsonify, g
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:\\Users\\pavit\\Desktop\\react-chat-app\\src\\users.db'
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:\\Users\\Varun Sahni\\Documents\\heart-sync-app\\src\\users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 CORS(app)
 
@@ -53,8 +52,8 @@ class Match(db.Model):
     totalMatches = db.Column(db.Integer)
 
 
-DATABASE = 'C:\\Users\\pavit\\Desktop\\react-chat-app\\src\\users.db'
-DATABASE2 = 'C:\\Users\\pavit\\Desktop\\react-chat-app\\src\\conversations.db'
+DATABASE = 'C:\\Users\\Varun Sahni\\Documents\\heart-sync-app\\src\\users.db'
+DATABASE2 = 'C:\\Users\\Varun Sahni\\Documents\\heart-sync-app\\src\\conversations.db'
 
 def get_db():
     db = getattr(g, '_database', None)

@@ -722,7 +722,7 @@ def join():
     image_binary = base64.b64decode(image_data)
 
     # Save the image locally with the username as the filename
-    image_path = os.path.join('C:\\Users\\pavit\\Desktop\\react-chat-app\\images', f"{username}.png")
+    image_path = os.path.join('C:\\Users\\Varun Sahni\\Documents\\heart-sync-app\\images', f"{username}.png")
     with open(image_path, 'wb') as f:
         f.write(image_binary)
 

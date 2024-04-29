@@ -20,11 +20,12 @@ function App() {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    height: '100vh',
+    height: '100%',
     textAlign: 'center',
-    maxWidth: '100%', // Limit width to the viewport width
+    maxWidth: '100%', // Limit width to 90% of the viewport width
     overflowX: 'hidden', // Hide horizontal overflow
-  }; 
+  };
+
 
   return (
     <Router>

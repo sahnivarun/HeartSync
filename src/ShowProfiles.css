@@ -7,7 +7,7 @@
     width: 600px;
     background-color: #f5f5f5;
   }
-  
+
   /* Profile card container styles */
   .profile-card-container {
     height: 80vh; /* Adjust the height as needed */
@@ -16,10 +16,10 @@
     justify-content: center;
     align-items: center;
   }
-  
+
   /* Profile card styles */
   .profile-card {
-    height: 520px; /* Fixed height */
+    height: 400px; /* Fixed height */
     width: 400px; /* Fixed width */
     background-color: #ffffff;
     border-radius: 10px;
@@ -29,7 +29,7 @@
     text-align: center;
     overflow-y: auto; /* Enable vertical scrolling if content exceeds height */
   }
-  
+
   /* Divider styles */
   .divider {
     width: 100%;
@@ -37,7 +37,7 @@
     border: none;
     border-top: 1px solid #ddd;
   }
-  
+
   /* About title styles */
   .about-title {
     font-size: 18px;
@@ -45,30 +45,30 @@
     color: #333333;
     margin-bottom: 10px;
   }
-  
+
   /* Profile image styles */
   .profile-image {
-    width: 300px;
-    height: 400px;
+    width: 250px;
+    height: 300px;
     border-radius: 0%;
     margin: 0 auto 20px;
     object-fit: cover;
   }
-  
+
   /* Profile name styles */
   .profile-name {
     font-size: 24px;
     color: #333333;
     margin-bottom: 10px;
   }
-  
+
   /* Profile bio styles */
   .profile-bio {
     font-size: 16px;
     color: #666666;
     margin-bottom: 20px;
   }
-  
+
   /* Action button styles */
   .actions {
     position: fixed; /* Position fixed within the viewport */
@@ -79,7 +79,7 @@
     justify-content: center;
     z-index: 1000; /* Ensure buttons appear above other content */
   }
-  
+
   .button {
     padding: 10px;
     margin: 0 10px;
@@ -89,19 +89,19 @@
     font-size: 34px;
     background-color: transparent;
   }
-  
+
   .like-button {
     color: #4caf50;
   }
-  
+
   .dislike-button {
     color: #f44336;
   }
-  
+
   .report-button {
     color: #2196f3;
   }
-  
+
   .match-popup {
     position: fixed;
     top: 50%;
@@ -114,13 +114,13 @@
     text-align: center;
     font-family: Arial, sans-serif;
   }
-  
+
   .match-popup p {
     margin: 0;
     font-size: 18px;
     color: #333333;
   }
-  
+
   .match-popup button {
     margin-top: 15px;
     padding: 10px 20px;
@@ -132,7 +132,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
-  
+
   .match-popup button:hover {
     background-color: #45a049;
   }
