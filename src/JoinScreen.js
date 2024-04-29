@@ -95,7 +95,15 @@ function JoinScreen() {
             // Format the date-time as per the requirement
             const lastOnline = `${year}-${month}-${day}-${hours}-${minutes}`;
 
-            const imageData = image && await convertImageToBase64(image);
+            // const imageData = image && await convertImageToBase64(image);
+
+            let imageData = null; // Initialize imageData variable
+
+            // Check if image is selected
+            if (image) {
+                // Convert image to base64 string
+                imageData = await convertImageToBase64(image);
+            }
 
             const response = await axios.post('http://127.0.0.1:5000/join', {
                 username,
