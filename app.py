@@ -6,9 +6,46 @@ import sqlite3
 import base64
 import os
 import json
+import requests
+import random
 
 app = Flask(__name__)
-CORS(app) 
+CORS(app)
+
+# Replace 'YOUR_PEXELS_API_KEY' with your actual Pexels API key
+PEXELS_API_KEY = 'EWZ8QvBgj7NkUKqWurmM6gPKczNwUud3qh3BJDgohA44g8hgdGE4R3mm'
+
+# Route to fetch a random image of a man from the Pexels API
+@app.route('/random-image', methods=['GET'])
+def get_random_image():
+    try:
+        # Make a request to the Pexels API
+        response = requests.get('https://api.pexels.com/v1/search?query=man', headers={'Authorization': PEXELS_API_KEY})
+        data = response.json()
+
+        # Extract the URL of a random image
+        random_index = random.randint(0, len(data['photos']) - 1)
+        random_image_url = data['photos'][random_index]['src']['large']
+
+        return jsonify({'success': True, 'random_image_url': random_image_url})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+# # Route to fetch a random image of a man from the Pexels API
+# @app.route('/random-image', methods=['GET'])
+# def get_random_image():
+#     try:
+#         # Make a request to the Pexels API
+#         response = requests.get('https://api.pexels.com/v1/search?query=man', headers={'Authorization': PEXELS_API_KEY})
+#         data = response.json()
+#
+#         # Extract the URL of a random image
+#         random_index = random.randint(0, len(data['photos']) - 1)
+#         random_image_url = data['photos'][random_index]['src']['large']
+#
+#         return jsonify({'success': True, 'random_image_url': random_image_url})
+#     except Exception as e:
+#         return jsonify({'success': False, 'error': str(e)})
 
 # Function to validate user credentials
 def validate_user(username, password):
