@@ -35,6 +35,8 @@ PEXELS_API_KEY = 'EWZ8QvBgj7NkUKqWurmM6gPKczNwUud3qh3BJDgohA44g8hgdGE4R3mm'
 
 
 i = 0
+profilepage = 0
+lastimage = ''
 
 def filter_dataframe(df, column, target_value):
     if target_value is not None:
@@ -851,6 +853,14 @@ def get_user_details(username):
 @app.route('/random-image/<username>', methods=['GET'])
 def get_random_image(username):
 
+    global profilepage
+    global lastimage
+
+    profilepage += 1
+
+    if profilepage == 2:
+        return lastimage
+
     print(username)
 
     conn = sqlite3.connect('users.db')
@@ -880,6 +890,8 @@ def get_random_image(username):
         random_index = random.randint(0, len(data['photos']) - 1)
         random_image_url = data['photos'][random_index]['src']['large']
 
+        lastimage = jsonify({'success': True, 'random_image_url': random_image_url})
+
         return jsonify({'success': True, 'random_image_url': random_image_url})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
@@ -889,7 +901,10 @@ def get_random_image(username):
 def reseti():
 
     global i
+    global profilepage
+
     i=0
+    profilepage = 0
     return jsonify({'success': True})
 
 @app.route('/random-image2/<username>', methods=['GET'])

@@ -50,13 +50,14 @@ function Login({ onLogin }) {
     <div className="login-container">
       {/* Head, title, and favicon */}
       <div className="login-content">
-        <h1>HeartSync</h1>
+
         <p className="tagline">Sync your heartbeats together</p>
         <h2>Make the first move</h2>
         <p>Start meeting new people in your area! If you already have an account, sign in to use HeartSync.</p>
         <div className="buttons-container">
-          <button type="button" onClick={handleJoin}>Join Now</button>
-          <button type="button" onClick={handleSignIn}>Sign In</button>
+        <button type="button" onClick={handleJoin}>Join Now</button>
+        <div class="horizontal-space"></div>
+        <button type="button" onClick={handleSignIn}>Sign In</button>
         </div>
 
         {showLoginScreen && !isAuthenticated && (

@@ -58,7 +58,7 @@ function MainScreen() {
                 </button>
                 <div style={{ width: '10px', height: '20px', alignSelf: 'center' }} />
                 <button onClick={handleInbox}>
-                    Inbox
+                    Love Bot
                 </button>
                 <div style={{ width: '10px', height: '20px', alignSelf: 'center' }} />
                 <button onClick={handleShowProfiles}>

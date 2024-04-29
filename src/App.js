@@ -21,8 +21,10 @@ function App() {
     alignItems: 'center',
     justifyContent: 'center',
     height: '100vh',
-    textAlign: 'center'
-  };    
+    textAlign: 'center',
+    maxWidth: '100%', // Limit width to the viewport width
+    overflowX: 'hidden', // Hide horizontal overflow
+  }; 
 
   return (
     <Router>

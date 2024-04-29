@@ -39,6 +39,7 @@ class Users(db.Model):
     sign = db.Column(db.String)
     username = db.Column(db.Text, unique=True)
     password = db.Column(db.Text)
+    name = db.Column(db.Text)
 
 class Like(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -122,7 +123,7 @@ def get_profiles(current_username):
         cursor.execute(query, (current_username, *rowids))
         profiles = cursor.fetchall()
 
-        columns = ['age','status','sex','orientation','body_type','diet','drinks','drugs','education','ethnicity','height','income','job','last_online','location','offspring','pets','religion','sign','smokes','speaks','essay0','essay1','essay2','essay3','essay4','essay5','essay6','essay7','essay8','essay9','username']
+        columns = ['age','status','sex','orientation','body_type','diet','drinks','drugs','education','ethnicity','height','income','job','last_online','location','offspring','pets','religion','sign','smokes','speaks','essay0','essay1','essay2','essay3','essay4','essay5','essay6','essay7','essay8','essay9','username','password','name']
         
         # Convert query results to a list of dictionaries
         result = [dict(zip(columns, profile)) for profile in profiles]
