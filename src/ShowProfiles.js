@@ -9,22 +9,56 @@ const ShowProfiles = () => {
   const location = useLocation();
   const [profiles, setProfiles] = useState([]);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
+  //const [imgurl, setImgURL] = useState('');
+  const [imgurl, setImgUrl] = useState(''); // State to hold the image URL
   const [matchPopup, setMatchPopup] = useState(false);
   const [likedUser, setLikedUser] = useState('');
+  const [i,setI] = useState(0);
   const current_username = location.state.username;
 
   useEffect(() => {
     // Fetch profiles from your server
     fetchProfiles();
+
   }, []);
 
-  const fetchProfiles = async () => {
+  const fetchProfiles = async () => {    
+
     try {
+
+      console.log('fetchProfiles called');  
       const response = await axios.get('http://localhost:5001/profiles/'+current_username);
       setProfiles(response.data.profiles);
+
+      if (response.data.profiles.length > 0) {
+        newImage();
+      }      
+
     } catch (error) {
       console.error('Error fetching profiles:', error);
     }
+    
+
+
+
+  };
+
+  const newImage = async () => {
+
+    try {
+        const imgResponse = await axios.get(`http://localhost:5000/random-image2/${current_username}`);
+        if (imgResponse.data.success) {
+         setImgUrl(imgResponse.data.random_image_url);
+          console.log('got url = ',imgurl);
+        } else {
+
+            let c = 1;
+        }
+      } catch (error) {
+        console.error('Error fetching image for profile:', imgurl, error);
+      }
+
+
   };
 
   const handleLike = async (username) => {
@@ -34,6 +68,7 @@ const ShowProfiles = () => {
       await axios.post('http://localhost:5001/like', { username: current_username, likedUsername: username, liked: true });
       checkForMatch(username);
       setCurrentProfileIndex(currentProfileIndex + 1);
+      newImage();
     } catch (error) {
       console.error('Error liking profile:', error);
     }
@@ -44,6 +79,7 @@ const ShowProfiles = () => {
       // await axios.post('http://localhost:5001/dislike', { username: 'user84335', likedUsername: username, liked: false });
       await axios.post('http://localhost:5001/dislike', { username: current_username, likedUsername: username, liked: false });
       setCurrentProfileIndex(currentProfileIndex + 1);
+      newImage();
     } catch (error) {
       console.error('Error disliking profile:', error);
     }
@@ -78,7 +114,8 @@ const ShowProfiles = () => {
       {profiles.length > 0 && currentProfileIndex < profiles.length && (
         <div className="profile-card">
           <div className="profile-section">
-            <img className="profile-image" src={profiles[currentProfileIndex].avatar} alt={profiles[currentProfileIndex].name} />
+          <img className="profile-image" src={imgurl} alt={profiles[currentProfileIndex].name} />
+          {console.log('url agian =',imgurl)}
             <h2 className="profile-name">{profiles[currentProfileIndex].name}</h2>
             <hr className="divider" />
             <p className="about-title">About</p>

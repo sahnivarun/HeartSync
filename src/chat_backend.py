@@ -18,12 +18,23 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sqlite3
 import base64
+
 import os
 import json
+
+import requests
+import random
+
+
+
 
 
 #FILTER########################################################################################################################
 
+PEXELS_API_KEY = 'EWZ8QvBgj7NkUKqWurmM6gPKczNwUud3qh3BJDgohA44g8hgdGE4R3mm'
+
+
+i = 0
 
 def filter_dataframe(df, column, target_value):
     if target_value is not None:
@@ -834,7 +845,99 @@ def get_user_details(username):
 
 
 
+###PHOTOS###########################################################################################
 
+
+@app.route('/random-image/<username>', methods=['GET'])
+def get_random_image(username):
+
+    print(username)
+
+    conn = sqlite3.connect('users.db')
+
+    query = "SELECT * FROM users WHERE username = ?"
+
+
+    df = pd.read_sql_query(query, conn, params=(username,))
+
+    conn.close()
+
+    print(df['sex'][0])
+
+    gender = df['sex'][0]
+    
+    try:
+        # Make a request to the Pexels API
+
+        if gender == 'Male':
+            response = requests.get('https://api.pexels.com/v1/search?query=man', headers={'Authorization': PEXELS_API_KEY})
+
+        else:
+            response = requests.get('https://api.pexels.com/v1/search?query=hot girl', headers={'Authorization': PEXELS_API_KEY})
+        data = response.json()
+
+        # Extract the URL of a random image
+        random_index = random.randint(0, len(data['photos']) - 1)
+        random_image_url = data['photos'][random_index]['src']['large']
+
+        return jsonify({'success': True, 'random_image_url': random_image_url})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+    
+
+@app.route('/reseti', methods=['GET'])    
+def reseti():
+
+    global i
+    i=0
+    return jsonify({'success': True})
+
+@app.route('/random-image2/<username>', methods=['GET'])
+def get_random_image2(username):
+
+    global i
+
+    i = i+1
+
+    if i == 2:
+        return jsonify({'success': False})
+
+    print(username)
+
+    conn = sqlite3.connect('users.db')
+
+    query = "SELECT * FROM users WHERE username = ?"
+
+
+    df = pd.read_sql_query(query, conn, params=(username,))
+
+    conn.close()
+
+    print(df['sex'][0])
+
+    gender = df['sex'][0]
+    
+    try:
+        # Make a request to the Pexels API
+
+        if gender == 'Male':
+            response = requests.get('https://api.pexels.com/v1/search?query=hot girl', headers={'Authorization': PEXELS_API_KEY})
+
+        else:
+            response = requests.get('https://api.pexels.com/v1/search?query=man', headers={'Authorization': PEXELS_API_KEY})
+        data = response.json()
+
+        # Extract the URL of a random image
+        random_index = random.randint(0, len(data['photos']) - 1)
+        random_image_url = data['photos'][random_index]['src']['large']
+
+        return jsonify({'success': True, 'random_image_url': random_image_url})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})    
+
+
+
+#####################################################################################################
 
 
 

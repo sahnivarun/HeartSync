@@ -10,6 +10,9 @@ function Profile() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [randomImage, setRandomImage] = useState(null);
+    
+
     useEffect(() => {
         if (!username) {
             setError('No username provided');
@@ -30,6 +33,20 @@ function Profile() {
             } catch (error) {
                 setError('Error fetching user details: ' + error.message);
             }
+
+            try {
+                const imageResponse = await axios.get('http://localhost:5000/random-image/'+username);
+                const { success: imageSuccess, random_image_url } = imageResponse.data;
+    
+                if (imageSuccess) {
+                    setRandomImage(random_image_url);
+                } else {
+                    setError('Failed to fetch random image');
+                }
+            } catch (error) {
+                setError('Error fetching random image: ' + error.message);
+            }
+
             setLoading(false);
         };
 
@@ -39,6 +56,21 @@ function Profile() {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
     if (!userDetails) return <div>User not found</div>;
+
+    const handleRandomImage = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/random-image');
+            const { success, random_image_url } = response.data;
+
+            if (success) {
+                setRandomImage(random_image_url);
+            } else {
+                setError('Failed to fetch random image');
+            }
+        } catch (error) {
+            setError('Error fetching random image');
+        }
+    };
 
     return (
         <div>
@@ -54,7 +86,12 @@ function Profile() {
                 }
                 `}
             </style>            
-            <div className="scrollable-container">            
+            
+            {userDetails && (
+            <div className="scrollable-container">    
+              
+            
+            {randomImage && <img src={randomImage} alt="Random" style={{ width: '100%', marginBottom: '20px' }} />}
             <h2>User Profile</h2>
             <p>Username: {userDetails.username}</p>
             <p>Password: {userDetails.password}</p>
@@ -92,6 +129,7 @@ function Profile() {
             <p>Essay 8: {userDetails.essay8}</p>
             <p>Essay 9: {userDetails.essay9}</p>
             </div>
+            )}
         </div>
     );
 }
