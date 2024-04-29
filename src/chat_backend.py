@@ -10,6 +10,7 @@ from rank_bm25 import BM25Okapi
 import nltk
 import string
 import numpy as np
+import ast
 import json
 
 
@@ -23,41 +24,47 @@ def filter_users(target_age_min=None, target_age_max=None, target_sex=None, targ
 
     # Connect to SQLite database
     conn = sqlite3.connect('users.db')
-    query = "SELECT * FROM users LIMIT 500"
+    query = "SELECT * FROM users LIMIT 1000"
     df = pd.read_sql_query(query, conn)
     conn.close()
 
-    print(df.head())
 
     # Applying filters dynamically
     if target_age_min is not None:
         df = df[df['age'] >= target_age_min]
     if target_age_max is not None:
         df = df[df['age'] <= target_age_max]
+
+    
+
+    # Apply filters dynamically for list-based conditions
     if target_sex is not None:
-        df = df[df['sex'].isin(target_sex)]
+        df = df[df['sex'].isin([target_sex])]  # Wraps the string in a list
+
     if target_status is not None:
-        df = df[df['status'].isin(target_status)]
+        df = df[df['status'].isin([target_status])]
     if target_orientation is not None:
-        df = df[df['orientation'].isin(target_orientation)]
+        df = df[df['orientation'].isin([target_orientation])]
     if target_drinks is not None:
-        df = df[df['drinks'].isin(target_drinks)]
+        df = df[df['drinks'].isin([target_drinks])]
     if target_drugs is not None:
-        df = df[df['drugs'].isin(target_drugs)]
+        df = df[df['drugs'].isin([target_drugs])]
     if target_ethnicity is not None:
-        df = df[df['ethnicity'].isin(target_ethnicity)]
+        df = df[df['ethnicity'].isin([target_ethnicity])]
+    if target_offspring is not None:
+        df = df[df['offspring'].isin([target_offspring])]
+    if target_pets is not None:
+        df = df[df['pets'].isin([target_pets])]
+    if target_religion is not None:
+        df = df[df['religion'].isin([target_religion])]
+    if target_smokes is not None:
+        df = df[df['smokes'].isin([target_smokes])]
+
+    # Numeric filters can remain the same
     if target_height is not None:
         df = df[df['height'] > target_height]
     if target_income is not None:
         df = df[df['income'] >= target_income]
-    if target_offspring is not None:
-        df = df[df['offspring'].isin(target_offspring)]
-    if target_pets is not None:
-        df = df[df['pets'].isin(target_pets)]
-    if target_religion is not None:
-        df = df[df['religion'].isin(target_religion)]
-    if target_smokes is not None:
-        df = df[df['smokes'].isin(target_smokes)]
 
     return df
 
@@ -75,8 +82,8 @@ nltk.download('stopwords')
 feature_weights = {
     'ethnicity': 0,
     'job': 0,
-    'body_type': 1,
-    'location': 0,
+    'body_type': 0,
+    'location': 5,
     'religion': 0,
     'sign': 0,
     'speaks': 0,
@@ -86,7 +93,7 @@ feature_weights = {
 def get_user_profiles(indices):
     conn = sqlite3.connect('users.db')
     placeholders = ', '.join(['?' for _ in indices])  # Create placeholders for SQL query
-    query = f"SELECT username, age, body_type,diet,drinks,drugs,education,ethnicity,religion,job, ROWID FROM users WHERE ROWID IN ({placeholders})"
+    query = f"SELECT username,sex, age,orientation,status, body_type,diet,drinks,drugs,education,ethnicity,religion,job, ROWID FROM users WHERE ROWID IN ({placeholders})"
     df_top_profiles = pd.read_sql_query(query, conn, params=indices)
     conn.close()
     return df_top_profiles
@@ -241,10 +248,34 @@ def ask_assistant():
 
 @app.route('/update-weights', methods=['POST'])
 def update_weights():
+
+    feature_weights = {
+        'ethnicity': 0,
+        'job': 0,
+        'body_type': 0,
+        'location': 5,
+        'religion': 0,
+        'sign': 0,
+        'speaks': 0,
+        'essays_concatenated': 0
+    }
+
     # Receive weights from the frontend
     data = request.json
-    print(data)
+
     weights = data.get('weights')
+
+    feature_weights['ethnicity'] = weights['ethnicity']
+    feature_weights['job'] = weights['job']
+    feature_weights['body_type'] = weights['bodyType']
+    feature_weights['location'] = weights['location']
+    feature_weights['religion'] = weights['religion']
+    feature_weights['sign'] = weights['horrorscope']
+    feature_weights['speaks'] = weights['language']
+    feature_weights['essays_concatenated'] = weights['bio']
+
+    print(feature_weights)
+
     current_user = data.get('current_user')
     if not weights:
         return jsonify({'error': 'Missing weights'}), 400
@@ -267,31 +298,61 @@ def calculate_recommendations(feature_weight,current_user):
 
     query = "SELECT * FROM users WHERE username = ?"
 
-    print(query)   
 
     df = pd.read_sql_query(query, conn, params=(current_user,))
 
-    print("print df tar = " ,  df['target_age_min'].values[0] )
+    print("print df tar = " ,  df )
+
+
+# Define a dictionary to store the target variables
+    target_variables = {}
+
+    # Iterate over each column that begins with 'target'
+    for column in df.columns:
+        if column.startswith('target'):
+            # Attempt to convert the string representation of a list to a list
+            try:
+                # Safely evaluate the string as a list if it's not already a list
+                if isinstance(df[column].iloc[0], str):
+                    evaluated_data = ast.literal_eval(df[column].iloc[0])
+                else:
+                    evaluated_data = df[column].iloc[0]
+                    
+                # Check if the result is a list and convert it to a space-separated string
+                if isinstance(evaluated_data, list):
+                    target_variables[column] = ' '.join(evaluated_data)
+                else:
+                    target_variables[column] = evaluated_data
+            except ValueError:
+                # Handle the case where the column is not a list or string representation of a list
+                target_variables[column] = df[column].iloc[0]      
+
+    print('drinks  = ',target_variables['target_drinks'])      
 
     filtered_df = filter_users(
-        target_age_min=df['target_age_min'].values[0],
-        target_age_max=df['target_age_max'].values[0],
-        target_sex=df['target_sex'].values[0]
-        #target_status=['Single']
-        #target_orientation=df['target_orientation']
-        #target_drinks=['not-at-all'],
-        #target_drugs=['never'],
-        #target_ethnicity=['American', 'Asian'],
-        #target_height=150,  # Assuming height is in cm
-        #target_offspring=['Wants kids'],
-        #target_pets=['Likes dogs'],
-        #target_religion=['Agnostic', 'Atheist','Jewish','Sikh','Catholic'],
-        #target_smokes=['']
+        target_age_min=target_variables['target_age_min'],
+        target_age_max=target_variables['target_age_max'],
+        target_sex=target_variables['target_sex'],
+        target_status=target_variables['target_status'],
+        target_orientation=target_variables['target_orientation']
+        #target_drinks=target_variables['target_drinks']
+        #target_drugs=target_variables['target_drugs']
+        #target_ethnicity=target_variables['target_ethnicity']
+        #target_height=target_variables['target_height'],  
+        #target_offspring=target_variables['target_offspring']
+        #target_pets=target_variables['target_pets'],
+        #target_religion=target_variables['target_religion']
+        #target_smokes=target_variables['target_smokes']
     )
+
+    filtered_df.loc[len(filtered_df)] = df.iloc[0].values
+    
 
     df = filtered_df
 
-    print(df)
+
+
+
 
     #query = "SELECT body_type, ethnicity, job, location, religion, sign, speaks, essay0, essay1, essay2, essay3, essay4, essay5, essay6, essay7, essay8, essay9 FROM users LIMIT 500"
     #df = pd.read_sql_query(query, conn)
@@ -300,7 +361,11 @@ def calculate_recommendations(feature_weight,current_user):
 
 
     # Preprocess essays by concatenating them and then preprocessing
-    df['essays_concatenated'] = df[['essay0', 'essay1', 'essay2', 'essay3', 'essay4', 'essay5', 'essay6', 'essay7', 'essay8', 'essay9']].fillna('').agg(' '.join, axis=1)
+    #df['essays_concatenated'] = df[['essay0', 'essay1', 'essay2', 'essay3', 'essay4', 'essay5', 'essay6', 'essay7', 'essay8', 'essay9']].fillna('').agg(' '.join, axis=1)
+    concatenated_series = df[['essay0', 'essay1', 'essay2', 'essay3', 'essay4', 'essay5', 'essay6', 'essay7', 'essay8', 'essay9']].fillna('').agg(lambda x: ' '.join(x), axis=1)
+    df['essays_concatenated'] = concatenated_series
+
+
     df['essays_concatenated'] = df['essays_concatenated'].apply(preprocess)
 
     # Initialize dictionaries to hold BM25 objects and corpora
@@ -339,8 +404,44 @@ def calculate_recommendations(feature_weight,current_user):
     # Calculate and sort scaled scores with indices for the combined features matrix
     sorted_combined_features_with_indices = scale_and_sort_combined_features(combined_features)    
 
-    top_indices = [idx for score, idx in sorted_combined_features_with_indices[0] if idx != 0][:10]
+    last_index = len(df) - 1
+
+    top_indices = [idx for score, idx in sorted_combined_features_with_indices[last_index] if idx != last_index][:50]
     top_user_profiles = get_user_profiles(top_indices)
+
+
+    if target_variables['target_age_min'] is not None:
+        top_user_profiles = top_user_profiles[top_user_profiles['age'] >= target_variables['target_age_min']]
+    if target_variables['target_age_max'] is not None:
+        top_user_profiles = top_user_profiles[top_user_profiles['age'] <= target_variables['target_age_max']]
+
+    
+
+    # Apply filters dynamically for list-based conditions
+    if target_variables['target_sex'] is not None:
+        top_user_profiles = top_user_profiles[top_user_profiles['sex'].isin([target_variables['target_sex']])]  # Wraps the string in a list
+
+    if target_variables['target_status'] is not None:
+        top_user_profiles = top_user_profiles[top_user_profiles['status'].isin([target_variables['target_status']])]
+    
+
+    if target_variables['target_orientation'] is not None:
+        top_user_profiles = top_user_profiles[top_user_profiles['orientation'].isin([target_variables['target_orientation']])]
+
+
+
+    print('top = ',top_user_profiles['rowid'].values)
+
+    top_indices = top_user_profiles['rowid'].values
+
+
+
+    file_name = f"{current_user}_recommendations.txt"
+
+    # Writing to a text file
+    with open(file_name, 'w') as file:
+        for index in top_indices:
+            file.write(f"{index}\n")
 
     # Convert DataFrame to a list of dictionaries for JSON serialization
     result_profiles = top_user_profiles.to_dict(orient='records')
