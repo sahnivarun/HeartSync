@@ -879,7 +879,7 @@ def get_random_image(username):
     try:
         # Make a request to the Pexels API
 
-        if gender == 'Male':
+        if gender == 'Male' or gender == 'male':
             response = requests.get('https://api.pexels.com/v1/search?query=man', headers={'Authorization': PEXELS_API_KEY})
 
         else:
@@ -935,7 +935,7 @@ def get_random_image2(username):
     try:
         # Make a request to the Pexels API
 
-        if gender == 'Male':
+        if gender == 'Male' or gender == 'male':
             response = requests.get('https://api.pexels.com/v1/search?query=hot girl', headers={'Authorization': PEXELS_API_KEY})
 
         else:

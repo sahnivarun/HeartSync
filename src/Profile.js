@@ -10,6 +10,8 @@ function Profile() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [checkpets,setCheckPets] = useState([]);
+
     const [randomImage, setRandomImage] = useState(null);
 
     useEffect(() => {
@@ -25,7 +27,10 @@ function Profile() {
                 const { success, user } = response.data;
 
                 if (success) {
-                    setUserDetails(user);
+                    setUserDetails(user);                
+
+
+
                 } else {
                     setError('Failed to fetch user details');
                 }
@@ -100,9 +105,7 @@ function Profile() {
                     {randomImage && <img src={randomImage} alt="Random" style={{ width: '100%', marginBottom: '20px' }} />}
                     <h2>User Profile</h2>
                     <p>Username: {userDetails.username}</p>
-                    <p>Password: {userDetails.password}</p>
-                    <p>Name: {userDetails.name}</p>
-                    <p>Image Path: {userDetails.image_path}</p>
+                    <p>Name: {userDetails.image_path}</p>
                     <p>Age: {userDetails.age}</p>
                     <p>Status: {userDetails.status}</p>
                     <p>Sex: {userDetails.sex}</p>
