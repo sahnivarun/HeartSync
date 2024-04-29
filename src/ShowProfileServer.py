@@ -73,7 +73,7 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
-@app.route('/profiles/<current_username>', methods=['GET'])
+'''@app.route('/profiles/<current_username>', methods=['GET'])
 def get_profiles(current_username):
     try:
         conn = get_db()
@@ -96,6 +96,43 @@ def get_profiles(current_username):
         
         return jsonify({'profiles': result})
     except sqlite3.Error as e:
+        return jsonify({"error": str(e)}), 500'''
+
+@app.route('/profiles/<current_username>', methods=['GET'])
+def get_profiles(current_username):
+    try:
+        # Read ROWIDs from the text file
+        filename = current_username+"_recommendations.txt"
+        with open(filename, 'r') as file:
+            rowids = file.read().split()
+        
+        # Convert ROWIDs from strings to integers
+        rowids = [int(id) for id in rowids]
+
+        conn = get_db()
+        cursor = conn.cursor()
+        
+        # Prepare the query to select users based on ROWIDs and exclude the current username
+        query = """
+        SELECT * FROM users 
+        WHERE username != ? AND ROWID IN ({})
+        """.format(','.join('?' for _ in rowids))  # Use '?' placeholders for ROWIDs in the query
+
+        # Execute the query with the current_username and the ROWIDs
+        cursor.execute(query, (current_username, *rowids))
+        profiles = cursor.fetchall()
+
+        columns = ['age','status','sex','orientation','body_type','diet','drinks','drugs','education','ethnicity','height','income','job','last_online','location','offspring','pets','religion','sign','smokes','speaks','essay0','essay1','essay2','essay3','essay4','essay5','essay6','essay7','essay8','essay9','username']
+        
+        # Convert query results to a list of dictionaries
+        result = [dict(zip(columns, profile)) for profile in profiles]
+
+        conn.close()
+        
+        return jsonify({'profiles': result})
+    except sqlite3.Error as e:
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route('/like', methods=['POST'])

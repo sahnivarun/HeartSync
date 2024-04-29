@@ -174,7 +174,7 @@ const ShowProfiles = () => {
           </div>
         </div>
       )}
-      {currentProfileIndex >= profiles.length && <p>No more profiles</p>}
+      {currentProfileIndex >= profiles.length && <h2>No more profiles! Try changing your filters and preferences!</h2>}
       </div>
     </div>
   );
