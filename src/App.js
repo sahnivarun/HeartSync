@@ -10,6 +10,8 @@ import MainScreen from './MainScreen';
 import Preferences from './Preferences';
 import JoinScreen from './JoinScreen';
 import ShowProfiles from './ShowProfiles';
+import Profile from './Profile'; // Make sure the path is correct
+
 
 function App() {
 
@@ -41,6 +43,7 @@ function App() {
         <Route path="/main" element={<MainScreen />} />
         <Route path="/login" element={<Login />} />
         <Route path="/join" element={<JoinScreen />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/preferences" element={<Preferences />} />
         <Route path="/showprofiles" element={<ShowProfiles />} />
         </Routes>

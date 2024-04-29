@@ -23,10 +23,15 @@ function MainScreen() {
         navigate('/choice', { state: { username } });
     };       
 
+    const handleViewProfile = () => {
+        navigate('/profile', { state: { username } }); // Navigate to Profile.js
+    };    
+
     return (
         <div>
             <h1>Welcome, {username}!</h1>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <button onClick={handleViewProfile} style={{ position: 'absolute', top: '50px', right: '10px' }}>View Your Profile</button>                
                 <button onClick={handleUpdatePreferences}>
                     Must Haves
                 </button>

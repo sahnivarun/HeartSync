@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // Import Link for navigation
 import { useLocation, useNavigate } from 'react-router-dom';
+import './choice.css';
 
 function Choice() {
   const location = useLocation();
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [recommendations, setRecommendations] = useState([]);
+  
   const current_username = location.state.username;
 
   const centeredStyle = {
@@ -38,6 +41,7 @@ function Choice() {
 
   const handleSubmit = () => {
     console.log('Sending data to backend:', weights);
+    setIsLoading(true); // Start loading
     fetch('http://localhost:5000/update-weights', {
         method: 'POST',
         headers: {
@@ -48,12 +52,15 @@ function Choice() {
     .then(response => response.json())
     .then(data => {
         console.log('Recommendations from backend:', data.recommendations);
-        setRecommendations(data.recommendations); // Set the recommendations state
+        setRecommendations(data.recommendations);
+        setIsLoading(false); // Stop loading when data is received
     })
     .catch(error => {
         console.error('Error:', error);
+        setIsLoading(false); // Stop loading on error
     });
-  };
+};
+
 
   const handleShowProfiles = () => {
     navigate('/showprofiles', { state: { username: current_username } });
@@ -61,6 +68,9 @@ function Choice() {
 
   return (
     <div className="Choice" style={centeredStyle}>
+        {isLoading && (
+            <div className="loading-message"><h2>Please wait while we set up the best profiles for you!</h2></div>
+        )}        
         <h1>What kind of profiles do you want to see {current_username}?</h1>
         {/* <button onClick={() => setViewMode('similar')}>I want to see similar profiles</button>
         <button onClick={() => setViewMode('explore')}>I'm open to explore</button> */}

@@ -24,6 +24,13 @@ import json
 
 #FILTER########################################################################################################################
 
+
+def filter_dataframe(df, column, target_value):
+    if target_value is not None:
+        value_list = target_value.split()  # Split the string by spaces into a list
+        df = df[df[column].isin(value_list)]
+    return df
+
 def filter_users(target_age_min=None, target_age_max=None, target_sex=None, target_status=None,
                  target_orientation=None, target_drinks=None, target_drugs=None, target_ethnicity=None,
                  target_height=None, target_income=None, target_offspring=None, target_pets=None,
@@ -45,27 +52,24 @@ def filter_users(target_age_min=None, target_age_max=None, target_sex=None, targ
     
 
     # Apply filters dynamically for list-based conditions
-    if target_sex is not None:
-        df = df[df['sex'].isin([target_sex])]  # Wraps the string in a list
-
     if target_status is not None:
-        df = df[df['status'].isin([target_status])]
+        df = filter_dataframe(df, 'status', target_status)
     if target_orientation is not None:
-        df = df[df['orientation'].isin([target_orientation])]
+        df = filter_dataframe(df, 'orientation', target_orientation)
     if target_drinks is not None:
-        df = df[df['drinks'].isin([target_drinks])]
+        df = filter_dataframe(df, 'drinks', target_drinks)
     if target_drugs is not None:
-        df = df[df['drugs'].isin([target_drugs])]
+        df = filter_dataframe(df, 'drugs', target_drugs)
     if target_ethnicity is not None:
-        df = df[df['ethnicity'].isin([target_ethnicity])]
+        df = filter_dataframe(df, 'ethnicity', target_ethnicity)
     if target_offspring is not None:
-        df = df[df['offspring'].isin([target_offspring])]
+        df = filter_dataframe(df, 'offspring', target_offspring)
     if target_pets is not None:
-        df = df[df['pets'].isin([target_pets])]
+        df = filter_dataframe(df, 'pets', target_pets)
     if target_religion is not None:
-        df = df[df['religion'].isin([target_religion])]
+        df = filter_dataframe(df, 'religion', target_religion)
     if target_smokes is not None:
-        df = df[df['smokes'].isin([target_smokes])]
+        df = filter_dataframe(df, 'smokes', target_smokes)
 
     # Numeric filters can remain the same
     if target_height is not None:
@@ -359,10 +363,10 @@ def calculate_recommendations(feature_weight,current_user):
     print('drinks  = ',target_variables['target_drinks'])      
 
     filtered_df = filter_users(
-        #target_age_min=target_variables['target_age_min'],
-        #target_age_max=target_variables['target_age_max'],
-        #target_sex=target_variables['target_sex'],
-        #target_status=target_variables['target_status'],
+        target_age_min=target_variables['target_age_min'],
+        target_age_max=target_variables['target_age_max'],
+        target_sex=target_variables['target_sex'],
+        target_status=target_variables['target_status']
         #target_orientation=target_variables['target_orientation']
         #target_drinks=target_variables['target_drinks']
         #target_drugs=target_variables['target_drugs']
@@ -459,23 +463,30 @@ def calculate_recommendations(feature_weight,current_user):
     #     top_user_profiles = top_user_profiles[top_user_profiles['sex'].iloc.isin([target_variables['target_sex']])]  # Wraps the string in a list
 
 
-    if target_variables['target_sex']:
-        target_sex_list = target_variables['target_sex'].split()  
+    # if target_variables['target_sex']:
+    #     target_sex_list = target_variables['target_sex'].split()  
 
-        top_user_profiles = top_user_profiles[top_user_profiles['sex'].isin(target_sex_list)]    
+    #     top_user_profiles = top_user_profiles[top_user_profiles['sex'].isin(target_sex_list)]    
 
-    if target_variables['target_status'] is not None:
-        # Split the target_status into a list if it's a non-empty string
-        target_status_list = target_variables['target_status'].split()  # Assuming space-separated values
-        # Filter the DataFrame
-        top_user_profiles = top_user_profiles[top_user_profiles['status'].isin(target_status_list)]
+    # if target_variables['target_status'] is not None:
+    #     # Split the target_status into a list if it's a non-empty string
+    #     target_status_list = target_variables['target_status'].split()  # Assuming space-separated values
+    #     # Filter the DataFrame
+    #     top_user_profiles = top_user_profiles[top_user_profiles['status'].isin(target_status_list)]
 
 
     if target_variables['target_orientation'] is not None:
         # Split the target_orientation into a list if it's a non-empty string
         target_orientation_list = target_variables['target_orientation'].split()  # Assuming space-separated values
-        # Filter the DataFrame
+
         top_user_profiles = top_user_profiles[top_user_profiles['orientation'].isin(target_orientation_list)]
+
+
+    if target_variables['target_ethnicity'] is not None:
+        # Split the target_orientation into a list if it's a non-empty string
+        target_orientation_list = target_variables['target_ethnicity'].split()  # Assuming space-separated values
+
+        top_user_profiles = top_user_profiles[top_user_profiles['ethnicity'].isin(target_orientation_list)]        
 
 
 

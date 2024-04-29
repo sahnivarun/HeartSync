@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import { format, parseISO } from 'date-fns'; // Importing necessary functions
+import './Chat.css'
 
 const socket = io.connect('http://localhost:5000');
 
@@ -9,6 +10,8 @@ function Chat({ otherUser, current, initialMessages }) {
     const [messages, setMessages] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
     const [userName, setUserName] = useState('');
+    const [loadingAssistant, setLoadingAssistant] = useState(false);
+
 
     useEffect(() => {
         // Only set initial messages if the messages array is empty
@@ -94,6 +97,7 @@ function Chat({ otherUser, current, initialMessages }) {
 
     const askAssistant = () => {
         // First fetch the latest messages
+        setLoadingAssistant(true);
         fetch(`http://localhost:5000/messages?User1=${current}&User2=${otherUser}`, {
             method: 'GET',
             headers: {
@@ -134,6 +138,7 @@ function Chat({ otherUser, current, initialMessages }) {
         .then(response => response.json())
         .then(data => {
             setSuggestions(data.suggestions);
+            setLoadingAssistant(false);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -162,6 +167,11 @@ function Chat({ otherUser, current, initialMessages }) {
     
     return (
         <div>
+            {loadingAssistant && (
+                <div className="assistant-loading">
+                    <h2>Please wait while HeartSync AI Assistant generates suggestions!</h2>
+                </div>
+            )}            
             <ul style={{ listStyleType: 'none', padding: 0 }}>
                 {messages.map((msg, index) => (
                     msg.content ? (
