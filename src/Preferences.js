@@ -9,7 +9,8 @@ function Preferences() {
 
     const [target_age_min, setTargetAgeMin] = useState('');
     const [target_age_max, setTargetAgeMax] = useState('');
-    const [target_sex, setTargetSex] = useState('');
+    // const [target_sex, setTargetSex] = useState('');
+    const [target_sex, setTargetSex] = useState([]);
     const [target_status, setTargetStatus] = useState('');
     const [target_orientation, setTargetOrientation] = useState('');
     const [target_drinks, setTargetDrinks] = useState('');
@@ -58,6 +59,16 @@ function Preferences() {
         fetchUserDetails();
     }, [username]);
 
+    const handleCheckboxChange = (value) => {
+        // Check if the value is already in the state
+        if (target_sex.includes(value)) {
+            // If it is, remove it
+            setTargetSex(target_sex.filter(item => item !== value));
+        } else {
+            // If it's not, add it
+            setTargetSex([...target_sex, value]);
+        }
+    };
 
     const handleOrientationChange = (value) => {
         // Toggle the value in the target_orientation state variable
@@ -195,67 +206,46 @@ function Preferences() {
     };
 
     return (
-        
         <div className="join-container">
             <h1>Who are you looking for, {username}?</h1>
             <form onSubmit={handleSubmit}>
 
-                {/*<div style={{ display: "flex", justifyContent: "center" }}>*/}
-                {/*    <div className="field" style={{ display: "flex", alignItems: "center" }}>*/}
-                {/*        <label htmlFor="target_sex" style={{ marginRight: "10px" }}>Sex<span>*</span>:</label>*/}
-                {/*        <ul className="options" style={{ display: "flex", listStyle: "none", padding: 0 }}>*/}
-                {/*            <li style={{ marginRight: "10px" }}>*/}
-                {/*                <input type="checkbox" id="male" name="target_sex" value="male" onChange={(e) => setTargetSex(e.target.value)} />*/}
-                {/*                <label htmlFor="male" style={{ fontSize: "0.9em" }}>Male</label>*/}
-                {/*            </li>*/}
-                {/*            <li style={{ marginRight: "10px" }}>*/}
-                {/*                <input type="checkbox" id="female" name="target_sex" value="female" onChange={(e) => setTargetSex(e.target.value)} />*/}
-                {/*                <label htmlFor="female" style={{ fontSize: "0.9em" }}>Female</label>*/}
-                {/*            </li>*/}
-                {/*            <li>*/}
-                {/*                <input type="checkbox" id="nonbinary" name="target_sex" value="nonbinary" onChange={(e) => setTargetSex(e.target.value)} />*/}
-                {/*                <label htmlFor="nonbinary" style={{ fontSize: "0.9em" }}>Nonbinary</label>*/}
-                {/*            </li>*/}
-                {/*        </ul>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
-
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <div className="field" style={{ display: "flex", alignItems: "center" }}>
-                        <label htmlFor="target_sex" style={{ marginRight: "10px" }}>Sex<span>*</span>:</label>
+                        <label htmlFor="target_sex" style={{ marginRight: "10px" }}>Gender<span>*</span>:</label>
                         <ul className="options" style={{ display: "flex", listStyle: "none", padding: 0 }}>
                             <li style={{ marginRight: "10px" }}>
                                 <input
                                     type="checkbox"
-                                    id="male"
+                                    id="Male"
                                     name="target_sex"
-                                    value="male"
-                                    checked={target_sex === 'male'} // Ensure checkbox reflects the state correctly
-                                    onChange={(e) => setTargetSex(e.target.value)} // Update state based on checkbox change
+                                    value="Male"
+                                    checked={target_sex.includes('Male')}
+                                    onChange={() => handleCheckboxChange('Male')}
                                 />
-                                <label htmlFor="male" style={{ fontSize: "0.9em" }}>Male</label>
+                                <label htmlFor="Male" style={{ fontSize: "0.9em" }}>Male</label>
                             </li>
                             <li style={{ marginRight: "10px" }}>
                                 <input
                                     type="checkbox"
-                                    id="female"
+                                    id="Female"
                                     name="target_sex"
-                                    value="female"
-                                    checked={target_sex === 'female'} // Ensure checkbox reflects the state correctly
-                                    onChange={(e) => setTargetSex(e.target.value)} // Update state based on checkbox change
+                                    value="Female"
+                                    checked={target_sex.includes('Female')}
+                                    onChange={() => handleCheckboxChange('Female')}
                                 />
-                                <label htmlFor="female" style={{ fontSize: "0.9em" }}>Female</label>
+                                <label htmlFor="Female" style={{ fontSize: "0.9em" }}>Female</label>
                             </li>
                             <li>
                                 <input
                                     type="checkbox"
-                                    id="nonbinary"
+                                    id="Nonbinary"
                                     name="target_sex"
-                                    value="nonbinary"
-                                    checked={target_sex === 'nonbinary'} // Ensure checkbox reflects the state correctly
-                                    onChange={(e) => setTargetSex(e.target.value)} // Update state based on checkbox change
+                                    value="Nonbinary"
+                                    checked={target_sex.includes('Nonbinary')}
+                                    onChange={() => handleCheckboxChange('Nonbinary')}
                                 />
-                                <label htmlFor="nonbinary" style={{ fontSize: "0.9em" }}>Nonbinary</label>
+                                <label htmlFor="Nonbinary" style={{ fontSize: "0.9em" }}>Nonbinary</label>
                             </li>
                         </ul>
                     </div>
@@ -296,47 +286,47 @@ function Preferences() {
                             <li style={{ marginRight: "10px" }}>
                                 <input
                                     type="checkbox"
-                                    id="straight"
+                                    id="Straight"
                                     value="Straight"
                                     onChange={(e) => handleOrientationChange(e.target.value)}
                                 />
-                                <label htmlFor="straight" style={{ fontSize: "0.9em" }}>Straight</label>
+                                <label htmlFor="Straight" style={{ fontSize: "0.9em" }}>Straight</label>
                             </li>
                             <li style={{ marginRight: "10px" }}>
                                 <input
                                     type="checkbox"
-                                    id="gay"
+                                    id="Gay"
                                     value="Gay"
                                     onChange={(e) => handleOrientationChange(e.target.value)}
                                 />
-                                <label htmlFor="gay" style={{ fontSize: "0.9em" }}>Gay</label>
+                                <label htmlFor="Gay" style={{ fontSize: "0.9em" }}>Gay</label>
                             </li>
                             <li style={{ marginRight: "10px" }}>
                                 <input
                                     type="checkbox"
-                                    id="bisexual"
+                                    id="Bisexual"
                                     value="Bisexual"
                                     onChange={(e) => handleOrientationChange(e.target.value)}
                                 />
-                                <label htmlFor="bisexual" style={{ fontSize: "0.9em" }}>Bisexual</label>
+                                <label htmlFor="Bisexual" style={{ fontSize: "0.9em" }}>Bisexual</label>
                             </li>
                             <li style={{ marginRight: "10px" }}>
                                 <input
                                     type="checkbox"
-                                    id="lesbian"
+                                    id="Lesbian"
                                     value="Lesbian"
                                     onChange={(e) => handleOrientationChange(e.target.value)}
                                 />
-                                <label htmlFor="lesbian" style={{ fontSize: "0.9em" }}>Lesbian</label>
+                                <label htmlFor="Lesbian" style={{ fontSize: "0.9em" }}>Lesbian</label>
                             </li>
                             <li>
                                 <input
                                     type="checkbox"
-                                    id="asexual"
+                                    id="Asexual"
                                     value="Asexual"
                                     onChange={(e) => handleOrientationChange(e.target.value)}
                                 />
-                                <label htmlFor="asexual" style={{ fontSize: "0.9em" }}>Asexual</label>
+                                <label htmlFor="Asexual" style={{ fontSize: "0.9em" }}>Asexual</label>
                             </li>
                         </ul>
                     </div>
@@ -349,29 +339,20 @@ function Preferences() {
                             <li style={{ marginRight: "10px" }}>
                                 <input
                                     type="checkbox"
-                                    id="single"
-                                    value="single"
+                                    id="Single"
+                                    value="Single"
                                     onChange={(e) => handleStatusChange(e.target.value)}
                                 />
-                                <label htmlFor="single" style={{ fontSize: "0.9em" }}>Single</label>
+                                <label htmlFor="Single" style={{ fontSize: "0.9em" }}>Single</label>
                             </li>
                             <li style={{ marginRight: "10px" }}>
                                 <input
                                     type="checkbox"
-                                    id="seeing-someone"
-                                    value="seeing someone"
+                                    id="Seeing Someone"
+                                    value="Seeing Someone"
                                     onChange={(e) => handleStatusChange(e.target.value)}
                                 />
-                                <label htmlFor="seeing-someone" style={{ fontSize: "0.9em" }}>Seeing Someone</label>
-                            </li>
-                            <li>
-                                <input
-                                    type="checkbox"
-                                    id="married"
-                                    value="married"
-                                    onChange={(e) => handleStatusChange(e.target.value)}
-                                />
-                                <label htmlFor="married" style={{ fontSize: "0.9em" }}>Married</label>
+                                <label htmlFor="Seeing Someone" style={{ fontSize: "0.9em" }}>Seeing Someone</label>
                             </li>
                         </ul>
                     </div>
@@ -383,38 +364,38 @@ function Preferences() {
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="socially"
-                                value="socially"
+                                id="Socially"
+                                value="Socially"
                                 onChange={(e) => handleDrinksChange(e.target.value)}
                             />
-                            <label htmlFor="socially" style={{ fontSize: "0.9em" }}>Socially</label>
+                            <label htmlFor="Socially" style={{ fontSize: "0.9em" }}>Socially</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="often"
-                                value="often"
+                                id="Often"
+                                value="Often"
                                 onChange={(e) => handleDrinksChange(e.target.value)}
                             />
-                            <label htmlFor="often" style={{ fontSize: "0.9em" }}>Often</label>
+                            <label htmlFor="Often" style={{ fontSize: "0.9em" }}>Often</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="not-at-all"
-                                value="not at all"
+                                id="Not at all"
+                                value="Not at all"
                                 onChange={(e) => handleDrinksChange(e.target.value)}
                             />
-                            <label htmlFor="not-at-all" style={{ fontSize: "0.9em" }}>Not at all</label>
+                            <label htmlFor="Not at all" style={{ fontSize: "0.9em" }}>Not at all</label>
                         </li>
                         <li>
                             <input
                                 type="checkbox"
-                                id="rarely"
-                                value="rarely"
+                                id="Rarely"
+                                value="Rarely"
                                 onChange={(e) => handleDrinksChange(e.target.value)}
                             />
-                            <label htmlFor="rarely" style={{ fontSize: "0.9em" }}>Rarely</label>
+                            <label htmlFor="Rarely" style={{ fontSize: "0.9em" }}>Rarely</label>
                         </li>
                     </ul>
                 </div>
@@ -425,29 +406,29 @@ function Preferences() {
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="never"
-                                value="never"
+                                id="Never"
+                                value="Never"
                                 onChange={(e) => handleDrugsChange(e.target.value)}
                             />
-                            <label htmlFor="never" style={{ fontSize: "0.9em" }}>Never</label>
+                            <label htmlFor="Never" style={{ fontSize: "0.9em" }}>Never</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="sometimes"
-                                value="sometimes"
+                                id="Sometimes"
+                                value="Sometimes"
                                 onChange={(e) => handleDrugsChange(e.target.value)}
                             />
-                            <label htmlFor="sometimes" style={{ fontSize: "0.9em" }}>Sometimes</label>
+                            <label htmlFor="Sometimes" style={{ fontSize: "0.9em" }}>Sometimes</label>
                         </li>
                         <li>
                             <input
                                 type="checkbox"
-                                id="often"
-                                value="often"
+                                id="Often"
+                                value="Often"
                                 onChange={(e) => handleDrugsChange(e.target.value)}
                             />
-                            <label htmlFor="often" style={{ fontSize: "0.9em" }}>Often</label>
+                            <label htmlFor="Often" style={{ fontSize: "0.9em" }}>Often</label>
                         </li>
                     </ul>
                 </div>
@@ -458,47 +439,56 @@ function Preferences() {
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="asian"
+                                id="Asian"
                                 value="Asian"
                                 onChange={(e) => handleEthnicityChange(e.target.value)}
                             />
-                            <label htmlFor="asian" style={{ fontSize: "0.9em" }}>Asian</label>
+                            <label htmlFor="Asian" style={{ fontSize: "0.9em" }}>Asian</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="american"
+                                id="American"
                                 value="American"
                                 onChange={(e) => handleEthnicityChange(e.target.value)}
                             />
-                            <label htmlFor="american" style={{ fontSize: "0.9em" }}>American</label>
+                            <label htmlFor="American" style={{ fontSize: "0.9em" }}>American</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="hispanic-latino"
+                                id="Hispanic/Latino"
                                 value="Hispanic/Latino"
                                 onChange={(e) => handleEthnicityChange(e.target.value)}
                             />
-                            <label htmlFor="hispanic-latino" style={{ fontSize: "0.9em" }}>Hispanic/Latino</label>
+                            <label htmlFor="Hispanic/Latino" style={{ fontSize: "0.9em" }}>Hispanic/Latino</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="black"
+                                id="Black"
                                 value="Black"
                                 onChange={(e) => handleEthnicityChange(e.target.value)}
                             />
-                            <label htmlFor="black" style={{ fontSize: "0.9em" }}>Black</label>
+                            <label htmlFor="Black" style={{ fontSize: "0.9em" }}>Black</label>
                         </li>
                         <li>
                             <input
                                 type="checkbox"
-                                id="other"
+                                id="White"
+                                value="White"
+                                onChange={(e) => handleEthnicityChange(e.target.value)}
+                            />
+                            <label htmlFor="White " style={{ fontSize: "0.9em" }}>White</label>
+                        </li>
+                        <li>
+                            <input
+                                type="checkbox"
+                                id="Other"
                                 value="Other"
                                 onChange={(e) => handleEthnicityChange(e.target.value)}
                             />
-                            <label htmlFor="other" style={{ fontSize: "0.9em" }}>Other</label>
+                            <label htmlFor="Other" style={{ fontSize: "0.9em" }}>Other</label>
                         </li>
                     </ul>
                 </div>
@@ -511,7 +501,7 @@ function Preferences() {
                         value={target_height}
                         onChange={(e) => setTargetHeight(e.target.value)}
                     />
-                    <span style={{ marginLeft: "5px" }}>Inches</span>
+                    <span style={{ marginLeft: "5px" }}>(in cm)</span>
                 </div>
 
                 <div className="field" style={{ marginTop: "40px" }}>
@@ -522,7 +512,7 @@ function Preferences() {
                         value={target_income}
                         onChange={(e) => setTargetIncome(e.target.value)}
                     />
-                    <span style={{ marginLeft: "5px" }}>$ per annum</span>
+                    <span style={{ marginLeft: "5px" }}>(in $ per annum)</span>
                 </div>
 
                 <div className="field categorical" style={{ display: "flex", justifyContent: "center", alignItems: "center"}}>
@@ -531,20 +521,20 @@ function Preferences() {
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="doesnt-want-kids"
+                                id="Doesn't want kids"
                                 value="Doesn't want kids"
                                 onChange={(e) => handleOffspringChange(e.target.value)}
                             />
-                            <label htmlFor="doesnt-want-kids" style={{ fontSize: "0.9em" }}>Doesn't want kids</label>
+                            <label htmlFor="Doesn't want kids" style={{ fontSize: "0.9em" }}>Doesn't want kids</label>
                         </li>
                         <li>
                             <input
                                 type="checkbox"
-                                id="wants-kids"
-                                value="Wants kids"
+                                id="Want kids"
+                                value="Want kids"
                                 onChange={(e) => handleOffspringChange(e.target.value)}
                             />
-                            <label htmlFor="wants-kids" style={{ fontSize: "0.9em" }}>Wants kids</label>
+                            <label htmlFor="Want kids" style={{ fontSize: "0.9em" }}>Want kids</label>
                         </li>
                     </ul>
                 </div>
@@ -555,38 +545,38 @@ function Preferences() {
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="likes-cats"
+                                id="Likes cats"
                                 value="Likes cats"
                                 onChange={(e) => handlePetsChange(e.target.value)}
                             />
-                            <label htmlFor="likes-cats" style={{ fontSize: "0.9em" }}>Likes cats</label>
+                            <label htmlFor="Likes cats" style={{ fontSize: "0.9em" }}>Likes cats</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="likes-dogs"
+                                id="Likes dogs"
                                 value="Likes dogs"
                                 onChange={(e) => handlePetsChange(e.target.value)}
                             />
-                            <label htmlFor="likes-dogs" style={{ fontSize: "0.9em" }}>Likes dogs</label>
+                            <label htmlFor="Likes dogs" style={{ fontSize: "0.9em" }}>Likes dogs</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="likes-other-pet"
+                                id="Likes some other pet"
                                 value="Likes some other pet"
                                 onChange={(e) => handlePetsChange(e.target.value)}
                             />
-                            <label htmlFor="likes-other-pet" style={{ fontSize: "0.9em" }}>Likes some other pet</label>
+                            <label htmlFor="Likes some other pet" style={{ fontSize: "0.9em" }}>Likes some other pet</label>
                         </li>
                         <li>
                             <input
                                 type="checkbox"
-                                id="dislikes-pets"
+                                id="Dislikes pets"
                                 value="Dislikes pets"
                                 onChange={(e) => handlePetsChange(e.target.value)}
                             />
-                            <label htmlFor="dislikes-pets" style={{ fontSize: "0.9em" }}>Dislikes pets</label>
+                            <label htmlFor="Dislikes pets" style={{ fontSize: "0.9em" }}>Dislikes pets</label>
                         </li>
                     </ul>
                 </div>
@@ -597,29 +587,29 @@ function Preferences() {
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="often"
+                                id="Often"
                                 value="Often"
                                 onChange={(e) => handleSmokesChange(e.target.value)}
                             />
-                            <label htmlFor="often" style={{ fontSize: "0.9em" }}>Often</label>
+                            <label htmlFor="Often" style={{ fontSize: "0.9em" }}>Often</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="not-at-all"
+                                id="Not at all"
                                 value="Not at all"
                                 onChange={(e) => handleSmokesChange(e.target.value)}
                             />
-                            <label htmlFor="not-at-all" style={{ fontSize: "0.9em" }}>Not at all</label>
+                            <label htmlFor="Not at all" style={{ fontSize: "0.9em" }}>Not at all</label>
                         </li>
                         <li>
                             <input
                                 type="checkbox"
-                                id="rarely"
+                                id="Rarely"
                                 value="Rarely"
                                 onChange={(e) => handleSmokesChange(e.target.value)}
                             />
-                            <label htmlFor="rarely" style={{ fontSize: "0.9em" }}>Rarely</label>
+                            <label htmlFor="Rarely" style={{ fontSize: "0.9em" }}>Rarely</label>
                         </li>
                     </ul>
                 </div>
@@ -630,92 +620,92 @@ function Preferences() {
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="buddhist"
+                                id="Buddhist"
                                 value="Buddhist"
                                 onChange={(e) => handleReligionChange(e.target.value)}
                             />
-                            <label htmlFor="buddhist" style={{ fontSize: "0.9em" }}>Buddhist</label>
+                            <label htmlFor="Buddhist" style={{ fontSize: "0.9em" }}>Buddhist</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="sikh"
+                                id="Sikh"
                                 value="Sikh"
                                 onChange={(e) => handleReligionChange(e.target.value)}
                             />
-                            <label htmlFor="sikh" style={{ fontSize: "0.9em" }}>Sikh</label>
+                            <label htmlFor="Sikh" style={{ fontSize: "0.9em" }}>Sikh</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="catholic"
+                                id="Catholic"
                                 value="Catholic"
                                 onChange={(e) => handleReligionChange(e.target.value)}
                             />
-                            <label htmlFor="catholic" style={{ fontSize: "0.9em" }}>Catholic</label>
+                            <label htmlFor="Catholic" style={{ fontSize: "0.9em" }}>Catholic</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="christian"
+                                id="Christian"
                                 value="Christian"
                                 onChange={(e) => handleReligionChange(e.target.value)}
                             />
-                            <label htmlFor="christian" style={{ fontSize: "0.9em" }}>Christian</label>
+                            <label htmlFor="Christian" style={{ fontSize: "0.9em" }}>Christian</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="hindu"
+                                id="Hindu"
                                 value="Hindu"
                                 onChange={(e) => handleReligionChange(e.target.value)}
                             />
-                            <label htmlFor="hindu" style={{ fontSize: "0.9em" }}>Hindu</label>
+                            <label htmlFor="Hindu" style={{ fontSize: "0.9em" }}>Hindu</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="jewish"
+                                id="Jewish"
                                 value="Jewish"
                                 onChange={(e) => handleReligionChange(e.target.value)}
                             />
-                            <label htmlFor="jewish" style={{ fontSize: "0.9em" }}>Jewish</label>
+                            <label htmlFor="Jewish" style={{ fontSize: "0.9em" }}>Jewish</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="muslim"
+                                id="Muslim"
                                 value="Muslim"
                                 onChange={(e) => handleReligionChange(e.target.value)}
                             />
-                            <label htmlFor="muslim" style={{ fontSize: "0.9em" }}>Muslim</label>
+                            <label htmlFor="Muslim" style={{ fontSize: "0.9em" }}>Muslim</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="spiritual"
+                                id="Spiritual"
                                 value="Spiritual"
                                 onChange={(e) => handleReligionChange(e.target.value)}
                             />
-                            <label htmlFor="spiritual" style={{ fontSize: "0.9em" }}>Spiritual</label>
+                            <label htmlFor="Spiritual" style={{ fontSize: "0.9em" }}>Spiritual</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
                             <input
                                 type="checkbox"
-                                id="agnostic"
+                                id="Agnostic"
                                 value="Agnostic"
                                 onChange={(e) => handleReligionChange(e.target.value)}
                             />
-                            <label htmlFor="agnostic" style={{ fontSize: "0.9em" }}>Agnostic</label>
+                            <label htmlFor="Agnostic" style={{ fontSize: "0.9em" }}>Agnostic</label>
                         </li>
                         <li>
                             <input
                                 type="checkbox"
-                                id="atheist"
+                                id="Atheist"
                                 value="Atheist"
                                 onChange={(e) => handleReligionChange(e.target.value)}
                             />
-                            <label htmlFor="atheist" style={{ fontSize: "0.9em" }}>Atheist</label>
+                            <label htmlFor="Atheist" style={{ fontSize: "0.9em" }}>Atheist</label>
                         </li>
                     </ul>
                 </div>

@@ -12,7 +12,14 @@ import string
 import numpy as np
 import ast
 import json
+import base64
 
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import sqlite3
+import base64
+import os
+import json
 
 
 #FILTER########################################################################################################################
@@ -227,13 +234,35 @@ def ask_assistant():
     data = request.get_json()
     current_conversation = data.get('conversation')
     current_user = data.get('currentUser')  # Retrieve current user from payload
+    otherUser = data.get('otherUser')  # Retrieve current user from payload
 
     if not current_conversation:
         return jsonify({"error": "No conversation provided"}), 400
+    
+
+    conn = sqlite3.connect('users.db')
+
+    #FILTER DATA HERE
+
+    query = "SELECT * FROM users WHERE username = ?"
+
+
+    df = pd.read_sql_query(query, conn, params=(otherUser,))
+
+    row = df.iloc[0]
+
+    conn.close()
+
+    user_profile = ", ".join([f"{key}: {value}" for key, value in row.items()])
+
+    print('user profile = ',user_profile)
+
+
+
 
     # Adjust the prompt to ask for suggestions specifically for the current user
     conversation_text = "\n".join([f"{msg.get('name', '')}: {msg.get('message', '')}" for msg in current_conversation])
-    prompt = f"I am {current_user}. Give me 5 suggestions for my next message based on the following conversation:\n{conversation_text}\nSuggestions:"
+    prompt = f"I am {current_user} and I am talking to {otherUser}. This is {otherUser}'s profile {user_profile}. Based on {otherUser}'s profile and following latest conversation:\n{conversation_text}\n give me 5 suggestions for my next message"
 
     print(prompt)
 
@@ -274,7 +303,7 @@ def update_weights():
     feature_weights['speaks'] = weights['language']
     feature_weights['essays_concatenated'] = weights['bio']
 
-    print(feature_weights)
+    print('fw = ',feature_weights)
 
     current_user = data.get('current_user')
     if not weights:
@@ -350,6 +379,8 @@ def calculate_recommendations(feature_weight,current_user):
 
     df = filtered_df
 
+    print('got following = ',df)
+
 
 
 
@@ -387,6 +418,8 @@ def calculate_recommendations(feature_weight,current_user):
     # Number of users (assumed to be the number of rows in df)
     num_users = len(df)   
 
+    print('num users = ',num_users)
+
     combined_features = calculate_combined_scores(bm25_objects, corpora, num_users, feature_weights)
 
     # Calculate and store scaled BM25 scores with indices
@@ -408,6 +441,8 @@ def calculate_recommendations(feature_weight,current_user):
 
     top_indices = [idx for score, idx in sorted_combined_features_with_indices[last_index] if idx != last_index][:50]
     top_user_profiles = get_user_profiles(top_indices)
+
+    print(last_index)
 
 
     if target_variables['target_age_min'] is not None:
@@ -589,12 +624,16 @@ def login():
 
 # Function to add a new user to the database
 def add_user(username, password, image_path, name, sex, age, location, status, orientation, body_type, diet, drinks, drugs, education, ethnicity, height, income, job, offspring, pets, religion, sign, smokes, speaks, essay0, essay1, essay2, essay3, essay4, essay5, essay6, essay7, essay8, essay9, last_online):
+
+    # Serialize the pets array into a string
+    pets_str = json.dumps(pets)
+
     # Connect to the database
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
 
     # Insert the new user into the database
-    cursor.execute("INSERT INTO users (username, password, name, image_path, sex, age, location, status, orientation, body_type, diet, drinks, drugs, education, ethnicity, height, income, job, offspring, pets, religion, sign, smokes, speaks, essay0, essay1, essay2, essay3, essay4, essay5, essay6, essay7, essay8, essay9, last_online) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (username, password, name, image_path, sex, age, location, status, orientation, body_type, diet, drinks, drugs, education, ethnicity, height, income, job, offspring, pets, religion, sign, smokes, speaks, essay0, essay1, essay2, essay3, essay4, essay5, essay6, essay7, essay8, essay9, last_online))
+    cursor.execute("INSERT INTO users (username, password, name, image_path, sex, age, location, status, orientation, body_type, diet, drinks, drugs, education, ethnicity, height, income, job, offspring, pets, religion, sign, smokes, speaks, essay0, essay1, essay2, essay3, essay4, essay5, essay6, essay7, essay8, essay9, last_online) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (username, password, name, image_path, sex, age, location, status, orientation, body_type, diet, drinks, drugs, education, ethnicity, height, income, job, offspring, pets_str, religion, sign, smokes, speaks, essay0, essay1, essay2, essay3, essay4, essay5, essay6, essay7, essay8, essay9, last_online))
 
     # Commit changes and close the database connection
     conn.commit()
@@ -644,7 +683,7 @@ def join():
     image_binary = base64.b64decode(image_data)
 
     # Save the image locally with the username as the filename
-    image_path = os.path.join('C:\\Users\\pavit\\Desktop\\react-chat-app\\images', f"{username}.png")
+    image_path = os.path.join('C:\\Users\\Varun Sahni\\Documents\\heart-sync-app\\images', f"{username}.png")
     with open(image_path, 'wb') as f:
         f.write(image_binary)
 
@@ -765,6 +804,7 @@ def get_user_details(username):
         return jsonify({'success': True, 'user': user})
     else:
         return jsonify({'success': False, 'message': 'User not found'})
+
 
 
 

@@ -2,13 +2,17 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { format, parseISO } from 'date-fns';  // Import format and parseISO functions
 import Chat from './Chat'; // Import Chat component
-
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function Inbox() {
 
 /////////////////////TESTING CURRENT USER
 
-const [currentUser, setCurrentUser] = useState('');
+    const location = useLocation();
+    const navigate = useNavigate();
+    const username = location.state.username;
+
+const [currentUser, setCurrentUser] = useState(username);
 const [isUserSet, setIsUserSet] = useState(false);
 
 const handleNameSubmit = (event) => {
@@ -66,7 +70,7 @@ const handleNameSubmit = (event) => {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            height: '100vh',
+            height: '80vh',
             background: '#f7f7f7', // light grey background
             width: '200%'
         },
@@ -143,13 +147,7 @@ const handleNameSubmit = (event) => {
 
     return (
         <div style={styles.inboxStyle}>
-            {!isUserSet ? (
-                <form onSubmit={handleNameSubmit}>
-                    <label htmlFor="name">Enter your name:</label>
-                    <input id="name" type="text" required />
-                    <button type="submit">Set Name</button>
-                </form>
-            ) : (
+
                 <>
                     <h1>Conversations</h1>
                     <div style={styles.boxStyle}>
@@ -171,7 +169,6 @@ const handleNameSubmit = (event) => {
                         </div>
                     </div>
                 </>
-            )}
         </div>
     );    
 }

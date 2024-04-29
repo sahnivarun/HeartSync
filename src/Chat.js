@@ -113,6 +113,7 @@ function Chat({ otherUser, current, initialMessages }) {
             // Prepare the payload for asking the assistant
             const payload = {
                 currentUser: current,
+                otherUser: otherUser,
                 conversation: updatedMessages.map(msg => ({
                     name: msg.name,
                     message: msg.message,

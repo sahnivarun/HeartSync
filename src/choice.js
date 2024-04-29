@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 function Choice() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [viewMode, setViewMode] = useState('');
   const [recommendations, setRecommendations] = useState([]);
   const current_username = location.state.username;
@@ -54,13 +55,17 @@ function Choice() {
     });
   };
 
+  const handleShowProfiles = () => {
+    navigate('/showprofiles', { state: { username: current_username } });
+   };       
+
   return (
     <div className="Choice" style={centeredStyle}>
         <h1>What kind of profiles do you want to see {current_username}?</h1>
-        <button onClick={() => setViewMode('similar')}>I want to see similar profiles</button>
-        <button onClick={() => setViewMode('explore')}>I'm open to explore</button>
+        {/* <button onClick={() => setViewMode('similar')}>I want to see similar profiles</button>
+        <button onClick={() => setViewMode('explore')}>I'm open to explore</button> */}
 
-        {viewMode === 'similar' && (
+        {(
             <div>
                 <h2>To help us recommend you similar profiles, choose the weights for following features:</h2>
                 {Object.keys(weights).map(feature => (
@@ -85,15 +90,12 @@ function Choice() {
         {/* Display recommendations if available */}
         {recommendations.length > 0 && (
             <div>
-                <h3>Top Recommended Profiles:</h3>
-                <ul>
-                    {recommendations.map((profile, index) => (
-                        <li key={index}>
-                            <strong>{profile.username}</strong> - {profile.age} years old, {profile.body_type}
-                            <br /> Job: {profile.job}, Religion: {profile.religion}
-                        </li>
-                    ))}
-                </ul>
+                <h3>Preferences Saved!</h3>
+                <p>We have saved your preferences!</p>
+                <p>Goto <strong>Show Profiles</strong> page to swipe through the profiles!</p>
+                <button onClick={handleShowProfiles}>
+                    Show Profiles
+                </button>                
             </div>
         )}
     </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './JoinScreen.css'; // or the name of your stylesheet
+import './JoinScreen.css';
 
 function JoinScreen() {
     const [username, setUsername] = useState('');
@@ -23,7 +23,8 @@ function JoinScreen() {
     const [income, setIncome] = useState('');
     const [job, setJob] = useState('');
     const [offspring, setOffspring] = useState('');
-    const [pets, setPets] = useState('');
+    //const [pets, setPets] = useState('');
+    const [pets, setPets] = useState([]);
     const [religion, setReligion] = useState('');
     const [sign, setSign] = useState('');
     const [smokes, setSmokes] = useState('');
@@ -55,6 +56,31 @@ function JoinScreen() {
             reader.readAsDataURL(image);
         });
     };
+
+    const handlePetsChange = (value) => {
+        // Create a new array to hold the updated pets
+        let updatedPets = [];
+
+        // If pets state is not null or undefined, assign it to updatedPets
+        if (pets) {
+            updatedPets = [...pets];
+        }
+
+        // Check if the value is already selected
+        const valueIndex = updatedPets.indexOf(value);
+
+        if (valueIndex !== -1) {
+            // If selected, remove it from the list
+            updatedPets.splice(valueIndex, 1);
+        } else {
+            // If not selected, add it to the list
+            updatedPets.push(value);
+        }
+
+        // Update the pets state with the updated array
+        setPets(updatedPets);
+    };
+
 
     const handleJoin = async (e) => {
         e.preventDefault();
@@ -179,7 +205,7 @@ function JoinScreen() {
 
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <div className="field" style={{ display: "flex", alignItems: "center" }}>
-                        <label htmlFor="sex" style={{ marginRight: "10px" }}>Sex<span>*</span>:</label>
+                        <label htmlFor="sex" style={{ marginRight: "10px" }}>Gender<span>*</span>:</label>
                         <ul className="options" style={{ display: "flex", listStyle: "none", padding: 0 }}>
                             <li style={{ marginRight: "10px" }}>
                                 <input type="radio" id="male" name="sex" value="male" onChange={(e) => setSex(e.target.value)} required />
@@ -225,27 +251,27 @@ function JoinScreen() {
                 </div>
 
                 <div className="field" style={{ display: "flex", alignItems: "center" }}>
-                    <label htmlFor="orientation" style={{ marginRight: "10px" }}>Orientation<span>*</span>:</label>
+                    <label htmlFor="orientation"  style={{ marginRight: "10px" }}>Orientation<span>*</span>:</label>
                     <ul className="options" style={{ display: "flex", listStyle: "none", padding: 0 }}>
                         <li style={{ marginRight: "10px" }}>
-                            <input type="radio" id="straight" name="orientation" value="Straight" onChange={(e) => setOrientation(e.target.value)} required />
-                            <label htmlFor="straight" style={{ fontSize: "0.9em" }}>Straight</label>
+                            <input type="radio" id="Straight" name="orientation" value="Straight" onChange={(e) => setOrientation(e.target.value)} required />
+                            <label htmlFor="Straight" style={{ fontSize: "0.9em" }}>Straight</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
-                            <input type="radio" id="gay" name="orientation" value="Gay" onChange={(e) => setOrientation(e.target.value)} required />
-                            <label htmlFor="gay" style={{ fontSize: "0.9em" }}>Gay</label>
+                            <input type="radio" id="Gay" name="orientation" value="Gay" onChange={(e) => setOrientation(e.target.value)} required />
+                            <label htmlFor="Gay" style={{ fontSize: "0.9em" }}>Gay</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
-                            <input type="radio" id="bisexual" name="orientation" value="Bisexual" onChange={(e) => setOrientation(e.target.value)} required />
-                            <label htmlFor="bisexual" style={{ fontSize: "0.9em" }}>Bisexual</label>
+                            <input type="radio" id="Bisexual" name="orientation" value="Bisexual" onChange={(e) => setOrientation(e.target.value)} required />
+                            <label htmlFor="Bisexual" style={{ fontSize: "0.9em" }}>Bisexual</label>
                         </li>
                         <li style={{ marginRight: "10px" }}>
-                            <input type="radio" id="lesbian" name="orientation" value="Lesbian" onChange={(e) => setOrientation(e.target.value)} required />
-                            <label htmlFor="lesbian" style={{ fontSize: "0.9em" }}>Lesbian</label>
+                            <input type="radio" id="Lesbian" name="orientation" value="Lesbian" onChange={(e) => setOrientation(e.target.value)} required />
+                            <label htmlFor="Lesbian" style={{ fontSize: "0.9em" }}>Lesbian</label>
                         </li>
                         <li>
-                            <input type="radio" id="asexual" name="orientation" value="Asexual" onChange={(e) => setOrientation(e.target.value)} required />
-                            <label htmlFor="asexual" style={{ fontSize: "0.9em" }}>Asexual</label>
+                            <input type="radio" id="Asexual" name="orientation" value="Asexual" onChange={(e) => setOrientation(e.target.value)} required />
+                            <label htmlFor="Asexual" style={{ fontSize: "0.9em" }}>Asexual</label>
                         </li>
                     </ul>
                 </div>
@@ -260,10 +286,9 @@ function JoinScreen() {
                             required
                         >
                             <option value="">--Select--</option>
-                            <option value="single">Single</option>
-                            <option value="seeing someone">Seeing Someone</option>
-                            <option value="married">Married</option>
-                        </select>
+                            <option value="Single">Single</option>
+                            <option value="Seeing Someone">Seeing Someone</option>
+                            </select>
                     </div>
 
                     <div className="field categorical" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px" }}>
@@ -275,17 +300,17 @@ function JoinScreen() {
                             // required
                         >
                             <option value="">--Select--</option>
-                            <option value="a little extra">A Little Extra</option>
-                            <option value="average">Average</option>
-                            <option value="thin">Thin</option>
-                            <option value="athletic">Athletic</option>
-                            <option value="fit">Fit</option>
-                            <option value="skinny">Skinny</option>
-                            <option value="curvy">Curvy</option>
-                            <option value="full figured">Full Figured</option>
-                            <option value="jacked">Jacked</option>
-                            <option value="prefer not to say">Prefer Not to Say</option>
-                            <option value="overweight">Overweight</option>
+                            <option value="A Little Extra">A Little Extra</option>
+                            <option value="Average">Average</option>
+                            <option value="Thin">Thin</option>
+                            <option value="Athletic">Athletic</option>
+                            <option value="Fit">Fit</option>
+                            <option value="Skinny">Skinny</option>
+                            <option value="Curvy">Curvy</option>
+                            <option value="Full Figured">Full Figured</option>
+                            <option value="Jacked">Jacked</option>
+                            <option value="Prefer Not To Say">Prefer Not to Say</option>
+                            <option value="Overweight">Overweight</option>
                         </select>
                     </div>
 
@@ -298,12 +323,13 @@ function JoinScreen() {
                             // required
                         >
                             <option value="">--Select--</option>
-                            <option value="anything">Anything</option>
-                            <option value="vegetarian">Vegetarian</option>
-                            <option value="vegan">Vegan</option>
-                            <option value="other">Other</option>
-                            <option value="halal">Halal</option>
-                            <option value="kosher">Kosher</option>
+                            <option value="Anything">Anything</option>
+                            <option value="Vegetarian">Vegetarian</option>
+                            <option value="Vegan">Vegan</option>
+                            <option value="Other">Other</option>
+                            <option value="Only Chicken">Only Chicken</option>
+                            <option value="Halal">Halal</option>
+                            <option value="Kosher">Kosher</option>
                         </select>
                     </div>
 
@@ -316,10 +342,10 @@ function JoinScreen() {
                             // required
                         >
                             <option value="">--Select--</option>
-                            <option value="socially">Socially</option>
-                            <option value="often">Often</option>
-                            <option value="not at all">Not at all</option>
-                            <option value="rarely">Rarely</option>
+                            <option value="Socially">Socially</option>
+                            <option value="Often">Often</option>
+                            <option value="Not At All">Not at all</option>
+                            <option value="Rarely">Rarely</option>
                         </select>
                     </div>
 
@@ -333,9 +359,9 @@ function JoinScreen() {
                             // required
                         >
                             <option value="">--Select--</option>
-                            <option value="never">Never</option>
-                            <option value="sometimes">Sometimes</option>
-                            <option value="often">Often</option>
+                            <option value="Never">Never</option>
+                            <option value="Sometimes">Sometimes</option>
+                            <option value="Often">Often</option>
                         </select>
                     </div>
 
@@ -351,7 +377,7 @@ function JoinScreen() {
                             <option value="Undergraduate">Undergraduate</option>
                             <option value="Graduate">Graduate</option>
                             <option value="High School">High School</option>
-                            <option value="prefer not to say">Prefer Not to Say</option>
+                            <option value="Prefer Not to Say">Prefer Not to Say</option>
                         </select>
                     </div>
 
@@ -368,6 +394,7 @@ function JoinScreen() {
                             <option value="American">American</option>
                             <option value="Hispanic/Latino">Hispanic/Latino</option>
                             <option value="Black">Black</option>
+                            <option value="White">White</option>
                             <option value="Other">Other</option>
                         </select>
                     </div>
@@ -417,25 +444,69 @@ function JoinScreen() {
                         >
                             <option value="">--Select--</option>
                             <option value="Doesn't want kids">Doesn't want kids</option>
-                            <option value="Wants kids">Wants kids</option>
+                            <option value="Want kids">Want kids</option>
                         </select>
                     </div>
 
+                    {/*<div className="field categorical" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px" }}>*/}
+                    {/*    <label htmlFor="pets" style={{ marginRight: "10px" }}>Pets:</label>*/}
+                    {/*    <select*/}
+                    {/*        id="pets"*/}
+                    {/*        value={pets}*/}
+                    {/*        onChange={(e) => setPets(e.target.value)}*/}
+                    {/*        // required*/}
+                    {/*    >*/}
+                    {/*        <option value="">--Select--</option>*/}
+                    {/*        <option value="Likes cats">Likes cats</option>*/}
+                    {/*        <option value="Likes dogs">Likes dogs</option>*/}
+                    {/*        <option value="Likes some other pet">Likes some other pet</option>*/}
+                    {/*        <option value="Dislikes pets">Dislikes pets</option>*/}
+
+                    {/*    </select>*/}
+                    {/*</div>*/}
+
                     <div className="field categorical" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px" }}>
                         <label htmlFor="pets" style={{ marginRight: "10px" }}>Pets:</label>
-                        <select
-                            id="pets"
-                            value={pets}
-                            onChange={(e) => setPets(e.target.value)}
-                            // required
-                        >
-                            <option value="">--Select--</option>
-                            <option value="Likes cats">Likes cats</option>
-                            <option value="Likes dogs">Likes dogs</option>
-                            <option value="Likes some other pet">Likes some other pet</option>
-                            <option value="Dislikes pets">Dislikes pets</option>
-                        </select>
+                        <ul className="options" style={{ display: "flex", listStyle: "none", padding: 0 }}>
+                            <li style={{ marginRight: "10px" }}>
+                                <input
+                                    type="checkbox"
+                                    id="Likes cats"
+                                    value="Likes cats"
+                                    onChange={(e) => handlePetsChange(e.target.value)}
+                                />
+                                <label htmlFor="Likes cats" style={{ fontSize: "0.9em" }}>Likes cats</label>
+                            </li>
+                            <li style={{ marginRight: "10px" }}>
+                                <input
+                                    type="checkbox"
+                                    id="Likes dogs"
+                                    value="Likes dogs"
+                                    onChange={(e) => handlePetsChange(e.target.value)}
+                                />
+                                <label htmlFor="Likes dogs" style={{ fontSize: "0.9em" }}>Likes dogs</label>
+                            </li>
+                            <li style={{ marginRight: "10px" }}>
+                                <input
+                                    type="checkbox"
+                                    id="Likes some other pet"
+                                    value="Likes some other pet"
+                                    onChange={(e) => handlePetsChange(e.target.value)}
+                                />
+                                <label htmlFor="Likes some other pet" style={{ fontSize: "0.9em" }}>Likes some other pet</label>
+                            </li>
+                            <li>
+                                <input
+                                    type="checkbox"
+                                    id="Dislikes pets"
+                                    value="Dislikes pets"
+                                    onChange={(e) => handlePetsChange(e.target.value)}
+                                />
+                                <label htmlFor="Dislikes pets" style={{ fontSize: "0.9em" }}>Dislikes pets</label>
+                            </li>
+                        </ul>
                     </div>
+
 
                     <div className="field categorical" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px" }}>
                         <label htmlFor="religion" style={{ marginRight: "10px" }}>Religion:</label>

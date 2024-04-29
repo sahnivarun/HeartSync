@@ -30,10 +30,11 @@ function App() {
         {/*<Link to="/choice"><button>Go to Choice</button></Link>*/}
         {/*<Link to="/Chat"><button>Go to Chat</button></Link>*/}
         {/* <Link to="/inbox"><button>Go to Inbox</button></Link> */}
-        <Link to="/login"><button>Go to Login</button></Link>
+        {/* <Link to="/login"><button>Go to Login</button></Link> */}
         {/* Setup the Router and Routes */}
         <img src={heartLogo} className="App-logo" alt="heart logo" />
         <Routes>
+        <Route path="/" element={<Login />} />
         <Route path="/inbox" element={<Inbox />} />
         <Route path="/chat" element={<Chat />} /> {/* Chat route */}
         <Route path="/choice" element={<Choice />} /> {/* Choice route */}
